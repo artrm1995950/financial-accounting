@@ -1,0 +1,283 @@
+/* content/stock-chart.css */
+body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+#controls { max-width: 900px; margin: 0 auto 20px; display: flex; gap: 10px; align-items: center; }
+#ticker-select { padding: 8px 12px; font-size: 16px; }
+#chart-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  /* задаём вёрсткой нужную высоту: */
+  height: 400px; 
+   padding: 20px;
+  padding-bottom: 100px;   /* освобождаем место снизу для кнопок */
+  height: 455px;           /* либо 60vh, как вам удобнее */
+  position: relative;  
+}
+canvas { display: block; }
+#loading { text-align: center; color: #666; margin-top: 10px; }
+#period-buttons {
+  display: flex;          /* строчный флекс */
+  flex-wrap: nowrap;      /* без переноса */
+  gap: 5px;
+  justify-content: center;
+  margin: 10px auto 0;
+  max-width: 900px;
+  overflow-x: 0;       /* если не помещается — появится скролл */
+  padding-bottom: 10px;   /* чуть отступ снизу */
+}
+
+/* Убираем border-radius, чтобы соседние кнопки не "слипались" */
+.period-btn {
+  flex: 0 0 auto;         /* не растягивается, не сжимается */
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  background: #f9f9f9;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Слегка скруглим только внешние края для красоты */
+.period-btn:first-child { border-radius: 4px 0 0 4px; }
+.period-btn:last-child  { border-radius: 0 4px 4px 0; }
+
+/* Активная кнопка */
+.period-btn.active {
+  background: #7c3aed;
+  color: #fff;
+  border-color: #7c3aed;
+}
+
+#chart-container canvas {
+  /* заставляем canvas растянуться по высоте контейнера */
+ width: 100% !important;
+  height: calc(100% - 60px) !important; /* оставьте немного места под заголовок/отметки */
+}/* Контейнер выбора тикера */
+#controls {
+  max-width: 900px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Стили для label */
+#controls label {
+  font-weight: 500;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Стили для селектора тикера */
+#ticker-select {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  transition: border-color .2s, box-shadow .2s;
+}
+#ticker-select:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124,58,237,0.2);
+}
+
+/* Группа кнопок периодов под графиком */
+#period-buttons {
+  max-width: 900px;
+  margin: 10px auto 0;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Базовые стили кнопок */
+.period-btn {
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background .2s, border-color .2s, color .2s;
+}
+
+/* Соседние кнопки чуть «сжатые» */
+.period-btn + .period-btn {
+  margin-left: -1px;
+}
+
+/* Hover и активное состояние */
+.period-btn:hover {
+  background: #f0f0f0;
+}
+.period-btn.active {
+  background: #7c3aed;
+  color: #fff;
+  border-color: #7c3aed;
+}
+/* в конец файла */
+
+#ticker-input {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 150px;
+  transition: border-color .2s;
+}
+
+#ticker-input:focus {
+  outline: none;
+  border-color: #7c3aed;
+}
+
+#ticker-btn {
+  padding: 8px 16px;
+  margin-left: 4px;
+  font-size: 1rem;
+  color: #fff;
+  background: #7c3aed;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background .2s;
+}
+
+#ticker-btn:hover {
+  background: #5a1ea5;
+}
+/* ---- Форма комментариев ---- */
+#comment-form {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 15px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#comment-form h2 {
+  margin: 0 0 10px;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+#comment-text {
+  width: 100%;
+  min-height: 80px;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.comment-options {
+  margin: 10px 0;
+}
+
+.comment-options label {
+  font-size: 0.95rem;
+  color: #555;
+  cursor: pointer;
+}
+
+.comment-options input[type="checkbox"] {
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+#comment-submit {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #7c3aed;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color .2s;
+}
+
+#comment-submit:hover {
+  background-color: #5a1ea5;
+}
+/* content/stock-chart.css */
+
+/* 1) Сбрасываем локальные overflow */
+#chart-container,
+#period-buttons,
+#comment-form {
+  overflow: visible !important;
+}
+
+/* 2) Убираем фиксированную высоту — пусть контейнер подстраивается */
+#chart-container {
+  /* УБРАТЬ эти строки: */
+  /* height: 400px; */
+  /* padding-bottom: 100px; */
+
+  /* вместо этого можно задать максимум, чтобы не вылезать: */
+  max-height: 60vh;
+}
+
+/* 3) Canvas пусть тянется по содержимому */
+#chart-container canvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* 4) Группу периодов разрешаем переносить строки */
+#period-buttons {
+  flex-wrap: wrap;    /* кнопки перейдут на новую строку, а не скроллятся */
+  overflow: visible;  /* убираем горизонтальный скролл */
+}
+
+/* 5) Главное — общий скролл на странице */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+/* Блок списка комментариев */
+#comments-list {
+  max-width: 900px;
+  margin: 20px auto 40px;
+  padding: 15px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#comments-list h2 {
+  margin: 0 0 10px;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+/* Отдельное сообщение */
+.comment-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.comment-item:last-child {
+  border-bottom: none;
+}
+
+.comment-item .meta {
+  font-size: .85rem;
+  color: #777;
+  margin-bottom: 4px;
+}
+
+.comment-item .text {
+  font-size: 1rem;
+  color: #222;
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login & Register</title>
+        <link rel="stylesheet" href="RegistrationStyles.css">
+        <script src="scriptRegistration.js" defer></script> <!-- Подключаем внешний JS файл -->
+        <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    </head>
+    
+<body>
+    <div class="container">
+        <div class="welcome-message">
+            <img src="pngtree-vector-bank-icon-png-image_711275.jpg" alt="Welcome Icon">
+            Добро пожаловать на сайт
+        </div>
+        <div class="form-container">
+           
+            <div class="form-box">
+                <h2>Вход в аккаунт</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <input type="email" id="login-email" placeholder="Адрес электронной почты" oninput="toggleButton('login-form', 'login-btn')" >
+                        <span id="login-email-error" class="error-message" style="display:none; color:red;">Email должен содержать символ "@".</span>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="login-password" placeholder="Пароль" oninput="toggleButton('login-form', 'login-btn')">
+                    </div>
+                    <div class="form-group">
+                        <button id="login-btn" disabled type="button" onclick="loginUser()">Войти</button>
+
+                    </div>
+                    <div class="form-group">
+                        <button id="reset-password-btn" type="button" onclick="showResetPassword()">Сброс пароля</button>
+                    </div>
+                  <!-- Поле для сброса пароля, скрыто по умолчанию -->
+                   <div class="form-group" id="reset-email-container" style="display: none;">
+                         <input type="email" id="reset-email" placeholder="Адрес электронной почты для сброса пароля" />
+                            <span id="reset-email-error" class="error-message"></span>
+                    </div> -
+  
+                      
+                    
+                </form>
+            </div>
+            <div class="divider"></div> 
+           
+            <div class="form-box" id="register-box">
+                <h2>Создание аккаунта</h2>
+                <form id="register-form">
+                    <div class="form-group">
+                        <input type="text" id="full-name" placeholder="Полное имя" oninput="toggleButton('register-form', 'register-btn')">
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="register-email" placeholder="Адрес электронной почты" oninput="toggleButton('register-form', 'register-btn')" >
+                        <span id="register-email-error" class="error-message" style="display:none; color:red;">Email должен содержать символ "@".</span>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="register-password" placeholder="Пароль" oninput="toggleButton('register-form', 'register-btn')">
+                    </div>
+                    <div class="form-group">
+                        <button id="register-btn" disabled type="button" onclick="sendVerificationCode()">Зарегистрироваться</button>
+                    </div>
+                </form>
+                
+                
+                <!-- Сообщение о том, что код отправлен -->
+                <div id="email-sent-message" style="display: none; color: black; margin-top: 10px;">
+                    <p>Проверочный код был отправлен на вашу почту!</p>
+                </div>
+                
+                <!-- Поле для ввода кода -->
+                <div id="verification-section" style="display: none;">
+                    <div class="form-group">
+                        <input type="text" id="verification-code" placeholder="Введите код">
+                    </div>
+                    <div class="form-group">
+                        <button id="verify-btn" onclick="verifyCode()">Проверить код</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        FinTek@mail.ru
+    </div>
+</body>
+</html>

@@ -1,0 +1,210 @@
+/* Центр: Личный кабинет */
+.info-card.profile-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  padding: 48px 40px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+/* Полоска изменять бекграунд*/
+.info-card.profile-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;  
+  background: #000; 
+}
+
+/* Заголовок */
+.info-card.profile-card h1 {
+  margin: 0 0 32px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #1c1c1e;
+}
+
+/* Разделители между строками */
+.profile-row + .profile-row {
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Модель сетки полей */
+.profile-row {
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+/* Метки */
+.profile-row .label,
+.profile-row .profile-label {
+  font-size: 16px;
+  color: #555;
+  font-weight: 500;
+}
+/* Центр: Личный кабинет */
+.info-card.profile-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16px;
+  padding: 48px 40px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+/* Полоска изменять бекграунд*/
+.info-card.profile-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;  
+  background: #000; 
+}
+
+/* Заголовок */
+.info-card.profile-card h1 {
+  margin: 0 0 32px;
+  font-size: 32px;
+  font-weight: 700;
+  color: #1c1c1e;
+}
+
+/* Разделители между строками */
+.profile-row + .profile-row {
+  border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Модель сетки полей */
+.profile-row {
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+}
+
+/* Метки */
+.profile-row .label,
+.profile-row .profile-label {
+  font-size: 16px;
+  color: #555;
+  font-weight: 500;
+}
+
+/* Поля ввода */
+.value,
+.profile-input {
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fafafa;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.value:focus,
+.profile-input:focus {
+  border-color: #8e2de2;
+  box-shadow: 0 0 0 3px rgba(142,45,226,0.2);
+  outline: none;
+}
+
+/* Кнопки */
+.btn-save {
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: #6931d1;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform .1s, opacity .2s;
+}
+
+.btn-save:hover {
+  opacity: 0.9;
+  background: #6931d1;
+  transform: translateY(-2px);
+}
+
+/* Адаптив */
+@media (max-width: 600px) {
+  .profile-row {
+    grid-template-columns: 1fr;
+    row-gap: 12px;
+  }
+  .profile-row .label,
+  .profile-row .profile-label {
+    width: 100%;
+  }
+  .value, .profile-input, .btn-save {
+    width: 100%;
+  }
+  .info-card.profile-card {
+    padding: 32px 24px;
+  }
+}
+
+/* Поля ввода */
+.value,
+.profile-input {
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fafafa;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.value:focus,
+.profile-input:focus {
+  border-color: #8e2de2;
+  box-shadow: 0 0 0 3px rgba(142,45,226,0.2);
+  outline: none;
+}
+
+/* Кнопки */
+.btn-save {
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: #6931d1;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform .1s, opacity .2s;
+}
+
+.btn-save:hover {
+  opacity: 0.9;
+  background: #6931d1;
+  transform: translateY(-2px);
+}
+
+/* Адаптив */
+@media (max-width: 600px) {
+  .profile-row {
+    grid-template-columns: 1fr;
+    row-gap: 12px;
+  }
+  .profile-row .label,
+  .profile-row .profile-label {
+    width: 100%;
+  }
+  .value, .profile-input, .btn-save {
+    width: 100%;
+  }
+  .info-card.profile-card {
+    padding: 32px 24px;
+  }
+}

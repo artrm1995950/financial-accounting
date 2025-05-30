@@ -1,0 +1,48 @@
+<!-- content/stock-chart.html -->
+<section class="stock-chart">
+    <!-- в <head> -->
+<link rel="stylesheet" href="content/stock-chart.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1"></script>
+<script src="content/stock-chart.js" defer></script>
+
+  <h1 id="chart-title" style="text-align:center;">График цен закрытия акций MOEX</h1>
+
+  <div id="controls">
+    <label for="ticker-select">Тикер:</label>
+    <select id="ticker-select">
+      <!-- опции добавятся JS -->
+    </select>
+    <input type="text" id="ticker-input" placeholder="Введите тикер" />
+  <button type="button" id="ticker-btn">Выбрать</button>
+  </div>
+  
+
+  <div id="chart-container">
+    <div id="loading">Загрузка данных и построение графика…</div>
+    <canvas id="sberChart" hidden></canvas>
+    <div id="period-buttons">
+      <button data-period="1w" class="period-btn">1 неделя</button>
+      <button data-period="1m" class="period-btn">1 месяц</button>
+      <button data-period="6m" class="period-btn">6 месяцев</button>
+      <button data-period="1y" class="period-btn">1 год</button>
+      <button data-period="2y" class="period-btn">2 года</button>
+      <button data-period="3y" class="period-btn">3 года</button>
+      <button data-period="4y" class="period-btn">4 года</button>
+    </div>
+  </div>
+  <div id="comment-form">
+    <h2>Обсуждение</h2>
+    <textarea id="comment-text" placeholder="Ваш комментарий…"></textarea>
+    <div class="comment-options">
+      <label><input type="checkbox" id="comment-anon" /> Анонимно</label>
+    </div>
+    <button type="button" id="comment-submit">Отправить</button>
+  </div>
+   <div id="comments-list">
+    <h2></h2>
+    <!-- Здесь появятся отдельные .comment-item -->
+  </div>
+</section>

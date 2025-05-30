@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Выписки | Финансовый учёт</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- стили для левой колонки подключаются в main -->
+  <!-- стили для этой страницы -->
+  <link rel="stylesheet" href="vypiski.css">
+</head>
+<body>
+  <!-- === контент для вставки в main === -->
+  <section class="statements-section">
+    <h1 class="title">Выписки</h1>
+
+    <div class="statements-filter">
+      <div class="field-row">
+        <label for="statement-date">Дата:</label>
+        <input type="date"
+               id="statement-date"
+               class="input-date">
+      </div>
+
+      <div class="field-row">
+        <label for="bank-select">Банк:</label>
+        <select id="bank-select"
+                class="input-select">
+          <option value="sber">Сбер</option>
+          <option value="tinkoff">Тинькофф Банк</option>
+          <option value="ozon">Озон Банк</option>
+          <option value="akbars">Ак Барс Банк</option>
+          <option value="yandex">Яндекс Банк</option>
+        </select>
+      </div>
+
+      <div class="field-row file-row">
+        <label for="file-input">Файл:</label>
+        <input type="text"
+               id="file-name-display"
+               class="input-filename"
+               placeholder="Имя файла..."
+               readonly>
+        <input type="file"
+               id="file-input"
+               class="input-file"
+               accept=".pdf,.xls,.xlsx">
+      </div>
+
+      <button type="button"
+              class="btn btn-primary btn-add">
+        Добавить
+      </button>
+    </div>
+
+    <div class="statements-list"
+         id="statements-list">
+      <!-- сюда скриптом будет подгружаться список выписок -->
+    </div>
+  </section>
+  <!-- === /контент === -->
+
+  <!-- Подключаем наш скрипт -->
+ </main>
+  <script src="ProfileScript.js"></script>
+</body>
+</html>

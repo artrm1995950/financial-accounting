@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Личный кабинет</title>
+  <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+  <main class="main-bg centered-columns">
+    <section class="info-card profile-card">
+      <h1>Личный кабинет</h1>
+
+      <!-- Имя -->
+      <div class="profile-row">
+        <label for="profile-name" class="label">Имя</label>
+        <input type="text" id="profile-name" class="value" value="">
+        <button type="button" class="btn-save">Сохранить</button>
+      </div>
+
+      <!-- E-mail -->
+      <div class="profile-row">
+        <label for="profile-email" class="label">E-mail</label>
+        <input type="email" id="profile-email" class="value" value="" disabled>
+      </div>
+
+      <!-- Ссылка на соцсеть -->
+    <!-- Ссылка на соцсеть -->
+  <div class="profile-row">
+    <label for="socialLink" class="profile-label">Ссылка на соцсеть</label>
+    <input type="text" id="socialLink" class="profile-input" value="">
+    <button
+     type="button"
+      
+      class="btn-save"
+    >Сохранить</button>
+  </div>
+
+
+      <!-- Никнейм -->
+      <div class="profile-row">
+        <label for="profile-nick" class="label">Никнейм</label>
+        <input type="text" id="profile-nick" class="value" value="">
+        <button type="button"  class="btn-save">Сохранить</button>
+      </div>
+
+      <!-- Дата рождения -->
+      <div class="profile-row">
+        <label for="profile-birth" class="profile-label">Дата рождения</label>
+        <input type="date" id="profile-birth" class="profile-input" value="">
+        <button type="button"  class="btn-save">Сохранить</button>
+      </div>
+
+      <!-- О себе -->
+      <div class="profile-row">
+  <label for="profile-about" class="profile-label">О себе</label>
+  <textarea id="profile-about" class="profile-input" rows="3" placeholder="Расскажите о себе…"></textarea>
+  <button type="button"  class="btn-save">Сохранить</button>
+</div>
+
+
+    </section>
+  </main>
+  <script src="ProfileScript.js"></script>
+
+</body>
+</html>

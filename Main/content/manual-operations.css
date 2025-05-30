@@ -1,0 +1,150 @@
+/* manual-operations.css */
+
+/* Секция и отступы */
+.statements-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Заголовок */
+.title {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 2rem;
+}
+
+/* Панель ввода операции */
+.statements-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  padding: 16px;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Блок «лейбл + поле» */
+.field-row {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+
+.field-row label {
+  margin-bottom: 4px;
+  color: #333;
+}
+
+/* Стили всех инпутов и селектов */
+.input-date,
+.input-select,
+.input-number {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 140px;
+  font-size: 1rem;
+  background: #fafbfc;
+  transition: border-color 0.2s;
+}
+
+.input-date:focus,
+.input-select:focus,
+.input-number:focus {
+  outline: none;
+  border-color: #7c4dff;
+}
+
+/* Общий класс кнопок */
+.btn {
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 10px 20px;
+}
+
+/* Кнопка «Добавить» */
+.btn-primary,
+.btn-add {
+  background: #7c4dff;
+  color: #fff;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover,
+.btn-add:hover {
+  background: #6931ca;
+}
+
+/* Список операций */
+.statements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Карточка операции */
+.statement-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  padding: 16px;
+  transition: box-shadow 0.2s;
+}
+
+.statement-item:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Инфо блока: дата и категория */
+.statement-info {
+  display: flex;
+  gap: 24px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.statement-info .statement-date {
+  font-weight: 600;
+}
+
+.statement-info .statement-category {
+  color: #555;
+}
+
+/* Отображение суммы */
+.statement-amount {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.statement-amount.expense {
+  color: #e53935;
+}
+
+.statement-amount.income {
+  color: #2e7d32;
+}
+/* Кнопка Удалить в стиле Добавить */
+.btn-delete {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  background: #7c4dff;
+  color: #fff;
+  transition: background-color 0.2s;
+}
+
+.btn-delete:hover {
+  background: #6931ca;
+}

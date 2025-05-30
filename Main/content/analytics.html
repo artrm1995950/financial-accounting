@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Аналитика</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.min.js"></script>
+  <link rel="stylesheet" href="content/analytics.css">
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.worker.min.js';
+  </script>
+</head>
+<body>
+  <div class="analytics-container">
+    <h1>Аналитика: распределение по категориям</h1>
+
+    <!-- Форма фильтра -->
+    <div class="filter-row">
+      <label for="startDate">С даты:</label>
+      <input type="date" id="startDate" />
+      <label for="endDate">По дату:</label>
+      <input type="date" id="endDate" />
+      <button id="applyFilter">Показать</button>
+    </div>
+
+    <!-- Канвас без дополнительного белого бокса -->
+    <div class="chart-wrapper">
+      <canvas id="categoryChart"></canvas>
+    </div>
+    <div class="chart-wrapper">
+  <canvas id="dailyChart"></canvas>
+</div>
+
+    <!-- Итоги -->
+    <div class="results-row">
+      <p id="analytics-error"></p>
+      <p id="total-spent"></p>
+      <p id="total-remainder"></p>
+    </div>
+  </div>
+
+  <script src="content/analytics.js"></script>
+</body>
+</html>

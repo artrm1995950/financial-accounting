@@ -1,0 +1,108 @@
+/* sidebar.css (обновлено) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #e8ebef;
+  display: flex;
+  height: 100vh;
+}
+/* 1) Пусть body будет флексом: sidebar + content */
+
+body {
+  display: flex;
+  height: 100vh;
+  margin: 0;
+}
+
+/* 2) Sidebar фиксированной ширины */
+aside.sidebar {
+  width: 260px;   /* подкорректируйте под свой sidebar.css */
+  flex-shrink: 0;
+}
+
+/* 3) Контент‑область растягивается и получает фон */
+#content {
+  flex: 1;
+
+  overflow-y: auto;         /* если много контента */
+}
+
+/* 4) Внутри content — уже ваши AJAX‑вставки, у них можно убрать фон */
+.content-area main {
+  background: transparent;  /* убираем если что-то наследовалось */
+  padding: 40px;            /* если нужен отступ вокруг карточки */
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.sidebar {
+  width: 220px;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(14px);
+  box-shadow: inset 2px 2px 10px rgba(255,255,255,0.9),
+              inset -2px -2px 10px rgba(0,0,0,0.08);
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  padding: 28px 16px;
+  display: flex;
+  flex-direction: column;
+}
+.user-email {
+  font-size: 14px;
+  font-weight: 600;
+  color: #9c27b0; /* пурпурный */
+  padding: 10px 16px;
+  margin-bottom: 24px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04), 
+              0 1px 2px rgba(0,0,0,0.06);
+  text-align: center;
+}
+.menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 14px 18px;
+  text-decoration: none;
+  color: #4a4a5e;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.7);
+  box-shadow: 4px 4px 8px rgba(0,0,0,0.05),
+              -4px -4px 8px rgba(255,255,255,0.8);
+  transition: all 0.25s ease;
+}
+.menu-item .icon {
+  font-size: 24px;
+  margin-right: 16px;
+  width: 28px;
+  text-align: center;
+}
+.menu-item .label {
+  font-size: 16px;
+  font-weight: 500;
+}
+.menu-item:hover {
+  background: rgba(255,255,255,0.9);
+  box-shadow: inset 2px 2px 6px rgba(0,0,0,0.08),
+              inset -2px -2px 6px rgba(255,255,255,0.9);
+}
+.menu-item.active {
+  /* sunset gradient + neon glow */
+  background: linear-gradient(135deg, #8e2de2 0%, #c648c0 50%, #e66465 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(230,100,101,0.3),
+              0 0 8px rgba(142,45,226,0.4);
+}
+.menu-item.active .icon,
+.menu-item.active .label {
+  color: #ffffff;
+}

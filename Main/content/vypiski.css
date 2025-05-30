@@ -1,0 +1,289 @@
+/* Файл: styles/vypiski.css */
+
+.content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+/* кнопка «Удалить» — стилизована как .btn-download */
+.btn-delete {
+  padding: 8px 16px;
+  border: none;
+  background-color: #3b82f6;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+  /* для расстояния от соседней кнопки */
+  margin-left: 8px;
+}
+
+.btn-delete:hover {
+  background-color: #2563eb;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Панель фильтров */
+.vypiski-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 20px;
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+
+.filter-item label {
+  margin-bottom: 5px;
+}
+
+.filter-input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 150px;
+}
+
+.btn-filter {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.btn-filter:hover {
+  background-color: #45a049;
+}
+
+/* Список выписок */
+.vypiski-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.statement-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  transition: box-shadow 0.2s;
+}
+
+.statement-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.statement-date {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.statement-desc {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.card-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.statement-amount {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.statement-amount.expense {
+  color: #e53935;
+}
+
+.statement-amount.income {
+  color: #2e7d32;
+}
+/* Скопировано из .btn-download, но для .btn-delete */
+
+
+.btn-download {
+  padding: 8px 16px;
+  border: none;
+  background-color: #2196F3;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.btn-download:hover {
+  background-color: #1976D2;
+}
+
+/* Адаптив */
+@media (max-width: 600px) {
+  .vypiski-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .card-right {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+}
+.statements-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 2rem;
+}
+
+.statements-filter {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8); /* полупрозрачный фон */
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  padding: 16px;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.field-row {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+}
+
+.field-row label {
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.input-date,
+.input-select,
+.input-file {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  min-width: 140px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn-primary,
+.btn-add {
+  background: #7c3aed; /* фиолетовый, как на прошлой форме */
+  color: #fff;
+}
+
+.btn-secondary,
+.btn-download {
+  background: #3b82f6; /* синий для кнопки «Скачать» */
+  color: #fff;
+}
+
+.statements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.statement-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.statement-info {
+  display: flex;
+  gap: 24px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.file-name { font-weight: 600; }
+.bank-name { color: #555; }
+.statement-date { color: #777; }
+.btn-delete {
+  padding: 8px 16px;
+  border: none;
+  background-color: #3b82f6;
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+  margin-left: 8px; /* чтобы отступ от кнопки «Скачать» */
+}
+
+.btn-delete:hover {
+  background-color: #1976D2;
+}
+/* content/stock-chart.css */
+
+#comments-list {
+  max-width: 900px;
+  margin: 20px auto;
+}
+
+.comment-item {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.comment-item:last-child {
+  border-bottom: none;
+}
+
+.comment-item .meta {
+  font-size: .85rem;
+  color: #777;
+  margin-bottom: 6px;
+}
+
+.comment-item .text {
+  font-size: 1rem;
+  color: #222;
+}

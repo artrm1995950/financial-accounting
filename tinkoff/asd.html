@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Портфель Тинькофф</title>
+</head>
+<body>
+  <h1>Получить Портфель</h1>
+  <form id="portfolio-form">
+    <input type="text" id="token" placeholder="Введите токен" required>
+    <button type="submit">Получить</button>
+  </form>
+
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById("portfolio-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const token = document.getElementById("token").value;
+
+      try {
+        const response = await fetch("http://localhost:3000/api/portfolio", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ token })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || "Ошибка получения портфеля");
+        }
+
+        const data = await response.json();
+        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+      } catch (err) {
+        document.getElementById("output").textContent = `Ошибка: ${err.message}`;
+      }
+    });
+  </script>
+</body>
+</html>

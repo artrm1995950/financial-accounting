@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>График по акциям MOEX</title>
+  <!-- Chart.js и плагины -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+    #controls { max-width: 900px; margin: 0 auto 20px; display: flex; gap: 10px; align-items: center; }
+    #ticker-select { padding: 8px 12px; font-size: 16px; }
+    #chart-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    canvas { display: block; }
+    #loading { text-align: center; color: #666; margin-top: 10px; }
+    /* стили кнопок периодов */
+    #period-buttons { text-align: center; margin-top: 10px; display: inline-flex; gap: 5px; }
+    .period-btn {
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      background: #f9f9f9;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .period-btn.active {
+      background: #7c3aed;
+      color: #fff;
+      border-color: #7c3aed;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="chart-title" style="text-align:center;">График цен закрытия акций MOEX</h1>
+
+  <div id="controls">
+    <label for="ticker-select">Тикер:</label>
+    <select id="ticker-select">
+      <option value="SBER" selected>SBER</option>
+    </select>
+  </div>
+
+  <div id="chart-container">
+    <div id="loading">Загрузка данных и построение графика…</div>
+    <canvas id="sberChart" hidden></canvas>
+    <div id="period-buttons">
+      <button data-period="1w" class="period-btn">1 неделя</button>
+      <button data-period="1m" class="period-btn">1 месяц</button>
+      <button data-period="6m" class="period-btn">6 месяцев</button>
+      <button data-period="1y" class="period-btn">1 год</button>
+      <button data-period="2y" class="period-btn">2 года</button>
+      <button data-period="3y" class="period-btn">3 года</button>
+      <button data-period="4y" class="period-btn">4 года</button>
+    </div>
+  </div>
+
+  <script>
+    // Получаем список всех тикеров MOEX
+    async function fetchTickers() {
+      const resp = await fetch('https://iss.moex.com/iss/engines/stock/markets/shares/securities.json?iss.meta=off');
+      const json = await resp.json();
+      const cols = json.securities.columns;
+      const data = json.securities.data;
+      const idxSec = cols.indexOf('SECID');
+      data.forEach(r => {
+        const sec = r[idxSec];
+        const opt = document.createElement('option');
+        opt.value = sec;
+        opt.textContent = sec;
+        document.getElementById('ticker-select').append(opt);
+      });
+    }
+
+    // Подгружаем все данные по тикеру за 2022–2025
+    async function loadChartData(ticker) {
+      const years = [2022, 2023, 2024, new Date().getFullYear()];
+      const allData = [];
+      for (const y of years) {
+        const from = `${y}-01-01`;
+        const today = new Date().toISOString().slice(0,10);
+        const till = y === new Date().getFullYear() ? today : `${y}-12-31`;
+        const resp = await fetch(
+          `https://iss.moex.com/iss/engines/stock/markets/shares/` +
+          `securities/${ticker}/candles.json?iss.only=candles&iss.meta=off` +
+          `&from=${from}&till=${till}&interval=24&limit=5000`
+        );
+        const json = await resp.json();
+        const cols = json.candles.columns;
+        const data = json.candles.data;
+        const idxDate  = cols.indexOf('begin') >= 0 ? cols.indexOf('begin') : cols.indexOf('TIMESTAMP');
+        const idxClose = cols.indexOf('close') >= 0 ? cols.indexOf('close') : cols.indexOf('LAST');
+        data.forEach(r => {
+          const d = r[idxDate].slice(0,10);
+          const c = parseFloat(r[idxClose]);
+          if (!isNaN(c)) allData.push({ date: d, close: c });
+        });
+      }
+      allData.sort((a, b) => new Date(a.date) - new Date(b.date));
+      return allData;
+    }
+
+    // Фильтруем по выбранному периоду
+    function filterByPeriod(data, period) {
+      const end = new Date();
+      let start;
+      switch (period) {
+        case '1w':
+          start = new Date(end.getFullYear(), end.getMonth(), end.getDate() - 7);
+          break;
+        case '1m':
+          start = new Date(end.getFullYear(), end.getMonth() - 1, end.getDate());
+          break;
+        case '6m':
+          start = new Date(end.getFullYear(), end.getMonth() - 6, end.getDate());
+          break;
+        case '1y':
+          start = new Date(end.getFullYear() - 1, end.getMonth(), end.getDate());
+          break;
+        case '2y':
+          start = new Date(end.getFullYear() - 2, end.getMonth(), end.getDate());
+          break;
+        case '3y':
+          start = new Date(end.getFullYear() - 3, end.getMonth(), end.getDate());
+          break;
+        case '4y':
+        default:
+          start = new Date(end.getFullYear() - 4, end.getMonth(), end.getDate());
+          break;
+      }
+      return data.filter(item => {
+        const d = new Date(item.date);
+        return d >= start && d <= end;
+      });
+    }
+
+    let chart, rawData = [];
+
+    // Построение графика и обновление заголовка
+    function renderChart(ticker, data) {
+      const labels = data.map(i => i.date);
+      const values = data.map(i => i.close);
+      const lastPrice = values[values.length - 1] || 0;
+
+      // Форматируем текущее время
+      const now = new Date();
+      const timestamp = now.toLocaleString('ru-RU', {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+
+      // Обновляем заголовок
+      document.getElementById('chart-title').textContent =
+        `${ticker}: ${lastPrice.toFixed(2)} ₽ (данные на ${timestamp})`;
+
+      const ctx = document.getElementById('sberChart').getContext('2d');
+      if (chart) chart.destroy();
+
+      const endLabel = {
+        id: 'endLabel',
+        afterDatasetsDraw(chart) {
+          const { ctx, data, chartArea: { right } } = chart;
+          const ds = data.datasets[0];
+          const meta = chart.getDatasetMeta(0);
+          const pt = meta.data[meta.data.length - 1];
+          const val = ds.data[ds.data.length - 1];
+          ctx.save();
+          ctx.fillStyle = ds.borderColor;
+          ctx.font = '12px Arial';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(val.toFixed(2), right + 8, pt.y);
+          ctx.restore();
+        }
+      };
+      const vLine = {
+        id: 'vLine',
+        afterDraw(chart) {
+          if (chart.tooltip._active && chart.tooltip._active.length) {
+            const ctx = chart.ctx;
+            const activePoint = chart.tooltip._active[0];
+            const x = activePoint.element.x;
+            const topY = chart.chartArea.top;
+            const bottomY = chart.chartArea.bottom;
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(x, topY);
+            ctx.lineTo(x, bottomY);
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'rgba(0,0,0,0.1)';
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+      };
+
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            borderColor: '#7c3aed',
+            borderWidth: 2,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            fill: true,
+            backgroundColor: 'rgba(124,58,237,0.2)',
+            tension: 0.1
+          }]
+        },
+        options: {
+          responsive: true,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            tooltip: { enabled: true, mode: 'index', intersect: false },
+            legend: { display: false },
+            zoom: { pan: { enabled: true, mode: 'x' }, zoom: { wheel: { enabled: true }, mode: 'x' } }
+          },
+          scales: {
+            x: { grid: { display: false }, border: { display: false }, ticks: { display: false } },
+            y: {
+              grid: { display: false },
+              border: { display: false },
+              title: { display: true, text: 'Цена, ₽' },
+              ticks: { display: true, callback: (value, index) => index === 0 ? '' : value }
+            }
+          }
+        },
+        plugins: [vLine, endLabel]
+      });
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('sberChart').hidden = false;
+    }
+
+    // Обновляем данные и график для выбранных тикера и периода
+    async function updateChart() {
+      const ticker = document.getElementById('ticker-select').value;
+      const activeBtn = document.querySelector('.period-btn.active');
+      const period = activeBtn ? activeBtn.dataset.period : '1m';
+
+      document.getElementById('loading').textContent = 'Загрузка данных…';
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('sberChart').hidden = true;
+
+      rawData = await loadChartData(ticker);
+      const filtered = filterByPeriod(rawData, period);
+      renderChart(ticker, filtered);
+    }
+
+    // Инициализация
+    (async () => {
+      await fetchTickers();
+
+      // навешиваем события на кнопки
+      document.querySelectorAll('.period-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          updateChart();
+        });
+      });
+
+      // задаем активную кнопку по умолчанию — 1 месяц
+      const defaultBtn = document.querySelector(`.period-btn[data-period="1m"]`);
+      if (defaultBtn) defaultBtn.classList.add('active');
+
+      // событие на смену тикера сразу обновляет график
+      document.getElementById('ticker-select').addEventListener('change', updateChart);
+
+      // первый рендер
+      await updateChart();
+    })().catch(err => {
+      console.error(err);
+      document.getElementById('loading').textContent = 'Ошибка загрузки';
+    });
+  </script>
+
+</body>
+</html>

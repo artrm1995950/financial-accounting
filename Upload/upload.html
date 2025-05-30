@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Загрузка PDF</title>
+    <link rel="stylesheet" href="styleUpload.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Загрузка PDF-файлов</h2>
+        
+        <div class="bank-section">
+            <p>Сбер</p>
+            <input type="file" id="sberInput" accept="application/pdf" onchange="updateStatus(this, 'sberStatus', 'sberUploadBtn')">
+            <span id="sberStatus" class="status">Файл не загружен</span>
+            <button id="sberUploadBtn" disabled onclick="readPdf('sberInput', 'sberOutput')">Загрузить файл</button>
+            <pre id="sberOutput"></pre>
+        </div>
+
+        <div class="bank-section">
+            <p>Тинькофф</p>
+            <input type="file" id="tinkoffInput" accept="application/pdf" onchange="updateStatus(this, 'tinkoffStatus', 'tinkoffUploadBtn')">
+            <span id="tinkoffStatus" class="status">Файл не загружен</span>
+            <button id="tinkoffUploadBtn" disabled onclick="readPdf('tinkoffInput', 'tinkoffOutput')">Загрузить файл</button>
+            <pre id="tinkoffOutput"></pre>
+        </div>
+    </div>
+    <div class="bank-section">
+        <p>Озон Банк</p>
+        <input type="file" id="ozonInput" accept="application/pdf" onchange="updateStatus(this, 'ozonStatus', 'ozonUploadBtn')">
+        <span id="ozonStatus" class="status">Файл не загружен</span>
+        <button id="ozonUploadBtn" disabled onclick="readPdf('ozonInput', 'ozonOutput')">Загрузить файл</button>
+        <pre id="ozonOutput"></pre>
+    </div>
+
+    <div class="bank-section">
+        <p>Ак Барс Банк</p>
+        <input type="file" id="akbarsInput" accept="application/pdf" onchange="updateStatus(this, 'akbarsStatus', 'akbarsUploadBtn')">
+        <span id="akbarsStatus" class="status">Файл не загружен</span>
+        <button id="akbarsUploadBtn" disabled onclick="readPdf('akbarsInput', 'akbarsOutput')">Загрузить файл</button>
+        <pre id="akbarsOutput"></pre>
+    </div>
+    <div class="bank-section">
+        <p>Яндекс Банк</p>
+        <input type="file" id="yandexInput" accept="application/pdf" onchange="updateStatus(this, 'yandexStatus', 'yandexUploadBtn')">
+        <span id="yandexStatus" class="status">Файл не загружен</span>
+        <button id="yandexUploadBtn" disabled onclick="readPdf('yandexInput', 'yandexOutput')">Загрузить файл</button>
+        <pre id="yandexOutput"></pre>
+    </div>
+   
+    <div class="bank-section">
+        <button id="combineFilesBtn" onclick="combineFiles()">Объединить файлы</button>
+      </div>
+      <div id="combinedOutput"></div>
+      <div style="width: 400px; height: 400px;">
+        <canvas id="categoryChart"></canvas>
+      </div>
+      
+
+ 
+      
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="scriptUpload.js"></script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FinAcc Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="sidebar.css">
+   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment@1"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <div id="user-email" class="user-email">Загрузка...</div>
+    <nav class="menu">
+      <a href="#" class="menu-item active" data-file="">
+        <i class=""></i><span class="label">Портфель</span>
+      </a>
+      <a href="#" class="menu-item" data-file="content/analytics.html">
+        <i class="mdi mdi-chart-line icon"></i><span class="label">Учет средств</span>
+      </a>
+      <a href="#" class="menu-item" data-file="content/profile.html">
+        <i class="mdi mdi-account-circle-outline icon"></i>
+        <span class="label">Личный кабинет</span>
+      </a>
+      <a href="#" class="menu-item" data-file="content/vypiski.html">
+        <i class="mdi mdi-file-document-outline icon"></i>
+        <span class="label">Выписки</span>
+      </a>
+      <a href="#" class="menu-item" data-file="content/manual-operations.html">
+      <i class="mdi mdi-pencil-box-outline icon"></i>
+      <span class="label">Операции вручную</span>
+      </a>
+      <a href="#" class="menu-item" data-file="content/stock-chart.html">
+        <i class="mdi mdi-finance icon"></i>
+        <span class="label">График MOEX</span>
+      </a>
+
+
+      
+      
+      <!-- остальные пункты аналогично, с data-file -->
+    </nav>
+  </aside>
+
+  <main id="content" class="content-area">
+    <!-- Здесь будет загружаться portfolio.html по умолчанию -->
+  </main>
+
+  <script>
+    
+  // 1) подтягиваем email
+  fetch('get_user_email.php', { credentials: 'include' })
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(d => { document.getElementById('user-email').textContent = d.email; })
+    .catch(() => { document.getElementById('user-email').textContent = ''; });
+
+  // 2) подгружаем контент
+  const contentEl = document.getElementById('content');
+  const items = document.querySelectorAll('.menu-item');
+
+  
+  function loadFile(path) {
+  console.log('⇒ loadFile:', path);
+  fetch(path, { credentials: 'include' })
+    .then(r => {
+      console.log(`  fetch ${path} status:`, r.status);
+      return r.ok ? r.text() : Promise.reject(r.status);
+    })
+    .then(html => {
+      contentEl.innerHTML = html;
+
+      if (path.endsWith('profile.html')) {
+  fetch('get_user_profile.php', { credentials: 'include' })
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(data => {
+      const nameEl  = contentEl.querySelector('#profile-name');
+      const emailEl = contentEl.querySelector('#profile-email');
+      if (nameEl)  nameEl.value  = data.full_name;
+      if (emailEl) emailEl.value = data.email;
+    })
+    .catch(err => console.error('Ошибка при загрузке профиля:', err));
+    
+}
+
+    })
+    .catch(err => {
+      console.error(`Ошибка загрузки ${path}:`, err);
+      contentEl.innerHTML = `<p style="color:red">Не удалось загрузить ${path} (код ${err})</p>`;
+    });
+}
+
+
+
+  items.forEach(item => {
+    item.addEventListener('click', e => {
+      e.preventDefault();
+      // переключаем активную
+      items.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      // грузим файл
+      loadFile(item.dataset.file);
+    });
+  });
+
+  // при старте — загружаем портфель
+  loadFile('content/portfolio.html');
+  </script>
+  <!-- ваш HTML для профиля... -->
+<script src="../Main/content/ProfileScript.js"></script>
+<script src="../Main/content/uploadFiles.js"></script>
+<script src="../Main/content/stock-chart.js"></script>
+<script src="../Main/content/analytics.js"></script>
+<script src="../Main/content/manual-operations.js"></script>
+<!-- Подключаем PDF.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.min.js"></script>
+<script>
+  // Указываем путь к воркеру (можете взять его из того же CDN)
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.worker.min.js';
+</script>
+
+</body>
+</html>
