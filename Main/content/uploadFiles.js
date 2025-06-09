@@ -152,31 +152,40 @@ document.addEventListener('click', async (e) => {
   fd.append('file',          fileInput.files[0]);
 
   try {
-    const res  = await fetch(UPLOAD_URL, {
-      method: 'POST',
-      credentials: 'include',
-      body: fd
-    });
-    const json = await res.json();
+  const res  = await fetch(UPLOAD_URL, {
+    method: 'POST',
+    credentials: 'include',
+    body: fd
+  });
 
-    if (json.status === 'success') {
-      dateInput.value          = '';
-      bankSelect.selectedIndex = 0;
-      fileInput.value          = '';
-      nameDisplay.value        = '';
-      alert('Файл успешно добавлен');
-      // *** Обновляем список сразу после добавления ***
-      await loadStatements();
-    } else {
-      alert('Ошибка: ' + (json.message || 'неизвестная'));
-    }
-  } catch (err) {
-    console.error(err);
-    alert('Сетевая ошибка при отправке');
-  } finally {
-    addButton.disabled    = false;
-    addButton.textContent = 'Добавить';
+  if (!res.ok) {
+    // Пишем в консоль HTTP-статус
+    console.error(`Ошибка HTTP: ${res.status}`);
+    const errorJson = await res.json();
+    alert('Ошибка: ' + (errorJson.message || 'Неизвестная ошибка'));
+    return;
   }
+
+  const json = await res.json();
+
+  if (json.status === 'success') {
+    dateInput.value          = '';
+    bankSelect.selectedIndex = 0;
+    fileInput.value          = '';
+    nameDisplay.value        = '';
+    alert('Файл успешно добавлен');
+    await loadStatements(); // обновить список
+  } else {
+    alert('Ошибка: ' + (json.message || 'неизвестная'));
+  }
+} catch (err) {
+  console.error('Сетевая ошибка:', err);
+  alert('Сетевая ошибка при отправке');
+} finally {
+  addButton.disabled    = false;
+  addButton.textContent = 'Добавить';
+}
+
 });
 
 // --- Инициализация при загрузке страницы ---

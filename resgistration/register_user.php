@@ -17,8 +17,7 @@ if ($mysqli->connect_error) {
 if (isset($_POST['full_name'], $_POST['email'], $_POST['password'])) {
     $fullName = $_POST['full_name'];
     $email = $_POST['email'];
-    $password = $_POST['password']; // Теперь мы сохраняем пароль в открытом виде
-
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     // Хешируем пароль, если вы хотите сохранить его как хеш
     // $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 

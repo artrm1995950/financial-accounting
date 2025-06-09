@@ -42,6 +42,26 @@ $uploadDir    = 'C:\\Users\\79969\\Desktop\\FileFinance\\';
 $originalName = basename($_FILES['file']['name']);
 $uniqueName   = $userId . '_' . uniqid() . '_' . $originalName;
 $targetPath   = $uploadDir . $uniqueName;
+// 4.5) Проверка расширения и MIME-типа
+$allowedExtensions = ['pdf', 'xlsx', 'xls', 'docx'];
+$allowedMimeTypes  = [
+    'application/pdf',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+];
+
+$fileMimeType = mime_content_type($_FILES['file']['tmp_name']);
+$fileExt      = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+
+if (!in_array($fileExt, $allowedExtensions) || !in_array($fileMimeType, $allowedMimeTypes)) {
+    http_response_code(400);
+    echo json_encode([
+        'status'  => 'error',
+        'message' => 'Недопустимый тип файла!'
+    ]);
+    exit;
+}
 
 // 5) Сохраняем файл
 if (!move_uploaded_file($_FILES['file']['tmp_name'], $targetPath)) {

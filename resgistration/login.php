@@ -26,7 +26,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $result->fetch_assoc();
 
         // Лучше — password_verify(), если храните хеш
-        if ($password === $user['password']) {
+            if ($password === $user['password']) {
+                
+
             // Авторизация успешна
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['email']   = $email;         // ← исправлено

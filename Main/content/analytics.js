@@ -1,12 +1,14 @@
+// Ежедневный график остаётся, но без прогноза. Месячный график теперь строит прогноз на 3 месяца вперёд.
 const STATEMENTS_URL  = 'content/get_statements_fullpath.php';
 const MANUAL_OPS_URL  = 'content/manuals_opertions/get_manual_operations.php';
 
-let ALL_TRANSACTIONS      = [];  // сюда сохраняются и выписки, и ручные операции
+let ALL_TRANSACTIONS      = [];
 let TOTAL_REMAINDER       = 0;
 let categoryChartInstance = null;
 let dailyChartInstance    = null;
+const MONTH_NAMES = ['январе', 'феврале', 'марте', 'апреле', 'мае', 'июне', 'июле', 'августе', 'сентябре', 'октябре', 'ноябре', 'декабре'];
+const MONTH_NAMES_NOMINATIVE = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'];
 
-// Ждём появления кнопки «Показать» и инициализируем
 const analyticsObserver = new MutationObserver(() => {
   const applyBtn = document.getElementById('applyFilter');
   if (applyBtn && !applyBtn.dataset.inited) {
@@ -21,26 +23,26 @@ async function initAnalytics() {
   errEl.textContent = '';
 
   try {
-    // 1) Загрузить и спарсить все выписки
     await loadAllStatements();
-    // 2) Загрузить ручные операции и добавить в общий массив
     await loadManualOperations();
+    await renderMonthlyForecastChart();
+    await renderIncomeVsExpenseChart();
+    await renderIncomeVsExpenseBarChart();
+
   } catch (e) {
     errEl.textContent = 'Ошибка загрузки данных: ' + e.message;
     return;
   }
 
-  // 3) Навесить обработчик на кнопку фильтра
   document.getElementById('applyFilter')
           .addEventListener('click', renderChartAnalytics);
 
-  // 4) Установить дефолтные даты (месяц назад и сегодня)
   const today = new Date().toISOString().slice(0,10);
-  document.getElementById('endDate').value   = today;
-  const monthAgo = new Date(); monthAgo.setMonth(monthAgo.getMonth() - 1);
+  document.getElementById('endDate').value = today;
+  const monthAgo = new Date();
+  monthAgo.setMonth(monthAgo.getMonth() - 1);
   document.getElementById('startDate').value = monthAgo.toISOString().slice(0,10);
 
-  // 5) Первичная отрисовка
   renderChartAnalytics();
 }
 
@@ -57,19 +59,127 @@ async function loadAllStatements() {
     try {
       const { transactions, remainderValue } = await parseAndReturn(stmt.id, stmt.bank);
       all.push(...transactions.map(tx => ({
-        // Переводим поля транзакции в единый формат (русские названия → англ.)
-        date:      formatDateDotToISO(tx.дата),
-        category:  tx.категория,
-        amount:    tx.сумма,
-        type:      tx.тип === '-' ? 'expense' : 'income'
+        date: formatDateDotToISO(tx.дата),
+        category: tx.категория,
+        amount: tx.сумма,
+        type: tx.тип === '-' ? 'expense' : 'income'
       })));
       if (typeof remainderValue === 'number') {
         TOTAL_REMAINDER += remainderValue;
       }
-    } catch (_) { /* пропускаем нераспаршенные */ }
+    } catch (_) {}
   }
 
   ALL_TRANSACTIONS = all;
+}async function renderIncomeVsExpenseBarChart() {
+  const MONTH_NAMES_PREPOSITIONAL = [
+  'январе', 'феврале', 'марте', 'апреле', 'мае', 'июне',
+  'июле', 'августе', 'сентябре', 'октябре', 'ноябре', 'декабре'
+];
+
+  const expenses = ALL_TRANSACTIONS.filter(tx => tx.type === 'expense' && tx.date && tx.amount);
+  const incomes  = ALL_TRANSACTIONS.filter(tx => tx.type === 'income'  && tx.date && tx.amount);
+
+  const all = [...expenses.map(tx => ({ ...tx, type: 'expense' })), ...incomes.map(tx => ({ ...tx, type: 'income' }))];
+  const df = all.map(tx => ({
+    month: tx.date.slice(0, 7),
+    type: tx.type,
+    category: tx.category || 'Без категории',
+    amount: tx.amount
+  }));
+
+  const grouped = {};
+  for (const row of df) {
+    if (!grouped[row.month]) grouped[row.month] = { expense: 0, income: 0 };
+    grouped[row.month][row.type] += row.amount;
+  }
+
+  const rawLabels = Object.keys(grouped).sort();
+  const labels = rawLabels.map(m => {
+  const [year, month] = m.split('-');
+  return `в ${MONTH_NAMES_PREPOSITIONAL[Number(month) - 1]} ${year}`;
+});
+
+
+  const expensesByMonth = rawLabels.map(m => Math.abs(grouped[m].expense || 0));
+  const incomeByMonth   = rawLabels.map(m => grouped[m].income || 0);
+
+  const canvas = document.getElementById('incomeVsExpenseBarChart');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Доходы',
+          data: incomeByMonth,
+          backgroundColor: 'rgba(0, 128, 0, 0.6)'
+        },
+        {
+          label: 'Расходы',
+          data: expensesByMonth,
+          backgroundColor: 'rgba(255, 99, 132, 0.6)'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: '₽' }
+        },
+        x: {
+          title: { display: true, text: 'Месяц' }
+        }
+      }
+    }
+  });
+
+  // Аналитика по каждому месяцу
+  const summaryEl = document.getElementById('analytics-summary');
+  summaryEl.innerHTML = '';
+
+  for (let i = 0; i < rawLabels.length; i++) {
+    const month = rawLabels[i];
+    const label = labels[i];
+
+    const monthExpenses = df.filter(row => row.type === 'expense' && row.month === month);
+    const monthTotal = monthExpenses.reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+
+    const byCategory = {};
+    for (const tx of monthExpenses) {
+      const cat = tx.category || 'Без категории';
+      byCategory[cat] = (byCategory[cat] || 0) + Math.abs(tx.amount);
+    }
+
+    let topCategory = 'Без категории';
+    let max = 0;
+    for (const cat in byCategory) {
+      if (byCategory[cat] > max) {
+        max = byCategory[cat];
+        topCategory = cat;
+      }
+    }
+
+    const p = document.createElement('p');
+    p.textContent = ` ${label} вы потратили ${monthTotal.toLocaleString('ru-RU')} ₽. Самая большая категория — ${topCategory}.`;
+    summaryEl.appendChild(p);
+  }
+}
+
+
+
+function addNextMonthLabel(currentMonthStr, offset = 1) {
+  const [year, month] = currentMonthStr.split('-').map(Number);
+  const d = new Date(year, month - 1 + offset);
+  return d.toISOString().slice(0, 7);
 }
 
 async function loadManualOperations() {
@@ -77,29 +187,26 @@ async function loadManualOperations() {
   const json = await resp.json();
   if (json.status !== 'success') throw new Error(json.message);
 
-  // Добавляем ручные операции прямо в массив
   const ops = json.operations.map(o => ({
-    date:     o.date,      // ожидаем YYYY-MM-DD
+    date: o.date,
     category: o.category,
-    amount:   parseFloat(o.amount),
-    type:     o.type       // 'expense' или 'income'
+    amount: parseFloat(o.amount),
+    type: o.type
   }));
 
   ALL_TRANSACTIONS.push(...ops);
 }
 
-// Преобразование «дд.мм.гггг» → «YYYY-MM-DD»
 function formatDateDotToISO(dotDate) {
   const [d,m,y] = dotDate.split('.').map(Number);
   return new Date(y, m-1, d).toISOString().slice(0,10);
 }
 
 function renderChartAnalytics() {
-  const errEl    = document.getElementById('analytics-error');
+  const errEl = document.getElementById('analytics-error');
   const canvasEl = document.getElementById('categoryChart');
   errEl.textContent = '';
 
-  // 1) Читаем диапазон дат
   const startVal = document.getElementById('startDate').value;
   const endVal   = document.getElementById('endDate').value;
   if (!startVal || !endVal) {
@@ -113,102 +220,84 @@ function renderChartAnalytics() {
     return;
   }
 
-  // 2) Фильтрация транзакций по диапазону
-const filtered = ALL_TRANSACTIONS.filter(tx => {
-    // если у элемента нет date — пропускаем
+  const filtered = ALL_TRANSACTIONS.filter(tx => {
     if (!tx.date) return false;
-    const dt = new Date(tx.date); 
+    const dt = new Date(tx.date);
     return dt >= startDate && dt <= endDate;
   });
 
-  if (filtered.length === 0) {
-    // … ваш код для пустого диапазона …
-  }
+  if (filtered.length === 0) return;
 
-  // 3) Считаем общие траты за период (только «-» операции)
   const totalSpent = filtered
     .filter(tx => tx.type === 'expense')
     .reduce((sum, tx) => sum + tx.amount, 0);
 
-  // 4) Агрегация по категориям (только «-» операции)
   const totals = {};
-  filtered
-    .filter(tx => tx.type === 'expense')
-    .forEach(tx => {
-      const cat = tx.category || 'Без категории';
-      totals[cat] = (totals[cat] || 0) + tx.amount;
-    });
+  filtered.filter(tx => tx.type === 'expense').forEach(tx => {
+    const cat = tx.category || 'Без категории';
+    totals[cat] = (totals[cat] || 0) + tx.amount;
+  });
 
-const labels = Object.keys(totals);
-const data   = labels.map(l => totals[l]);
+  const labels = Object.keys(totals);
+  const data = labels.map(l => totals[l]);
 
-// 5) Перерисовка круговой диаграммы
-if (categoryChartInstance) categoryChartInstance.destroy();
-categoryChartInstance = new Chart(canvasEl.getContext('2d'), {
-  type: 'pie',
-  data: { labels, datasets: [{ data }] },
-  options: {
-    responsive: true,
-    maintainAspectRatio: true,
-    layout: { padding: 20 },
-    interaction: { mode: 'nearest', intersect: true },
-    plugins: {
-      legend: { position: 'right' },
-      tooltip: {
-        enabled: true,
-        position: 'nearest',
-        callbacks: {
-          label: ctx => {
-            const val = ctx.parsed;
-            const sum = data.reduce((a,b) => a + b, 0);
-            const pct = (val / sum * 100).toFixed(1) + '%';
-            return `${ctx.label}: ${val.toLocaleString('ru-RU')} ₽ (${pct})`;
+  if (categoryChartInstance) categoryChartInstance.destroy();
+  categoryChartInstance = new Chart(canvasEl.getContext('2d'), {
+    type: 'pie',
+    data: { labels, datasets: [{ data }] },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'right' },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const val = ctx.parsed;
+              const sum = data.reduce((a,b) => a + b, 0);
+              const pct = (val / sum * 100).toFixed(1) + '%';
+              return `${ctx.label}: ${val.toLocaleString('ru-RU')} ₽ (${pct})`;
+            }
           }
         }
       }
     }
-  }
-});
+  });
 
-
-  // 6) Вывод итогов
   document.getElementById('total-spent').textContent =
     `Траты за период: ${totalSpent.toLocaleString('ru-RU', { minimumFractionDigits: 2 })} ₽`;
   document.getElementById('total-remainder').textContent =
     `Общий остаток по всем выпискам: ${TOTAL_REMAINDER.toLocaleString('ru-RU', { minimumFractionDigits: 2 })} ₽`;
 
-  // 7) Отрисуем ежедневный график с учётом знака
   renderDailyChart(filtered);
 }
-function renderDailyChart(filtered) {
-  const sumsByDate = {};
 
-  // агрегируем только расходные операции по полю `type==="expense"`
-  filtered
-    .filter(tx => tx.type === 'expense')
-    .forEach(tx => {
-      // tx.date — ISO-строка "YYYY-MM-DD"
-      const key = tx.date;
-      sumsByDate[key] = (sumsByDate[key] || 0) + tx.amount;
-    });
+async function renderDailyChart(filtered) {
+  const sumsByDate = {};
+  filtered.filter(tx => tx.type === 'expense').forEach(tx => {
+    const key = tx.date;
+    sumsByDate[key] = (sumsByDate[key] || 0) + tx.amount;
+  });
 
   const labels = Object.keys(sumsByDate).sort();
-  const data   = labels.map(d => sumsByDate[d]);
+  const data = labels.map(d => sumsByDate[d]);
 
   const ctx = document.getElementById('dailyChart').getContext('2d');
   if (dailyChartInstance) dailyChartInstance.destroy();
+
   dailyChartInstance = new Chart(ctx, {
     type: 'line',
     data: {
       labels,
-      datasets: [{
-        label: 'Траты в день, ₽',
-        data,
-        fill: true,
-        tension: 0.2,
-        borderWidth: 2,
-        pointRadius: 3
-      }]
+      datasets: [
+        {
+          label: 'Траты в день, ₽',
+          data,
+          borderColor: 'blue',
+          fill: true,
+          tension: 0.2,
+          pointRadius: 3
+        }
+      ]
     },
     options: {
       responsive: true,
@@ -228,11 +317,252 @@ function renderDailyChart(filtered) {
           title: { display: true, text: 'Сумма, ₽' }
         }
       },
+      plugins: { legend: { position: 'top' } }
+    }
+  });
+}
+async function renderIncomeVsExpenseChart() {
+  const expenses = ALL_TRANSACTIONS.filter(tx => tx.type === 'expense' && tx.date && tx.amount);
+  const incomes  = ALL_TRANSACTIONS.filter(tx => tx.type === 'income'  && tx.date && tx.amount);
+
+  const all = [...expenses.map(tx => ({ ...tx, type: 'expense' })), ...incomes.map(tx => ({ ...tx, type: 'income' }))];
+  const df = all.map(tx => ({
+    month: tx.date.slice(0, 7),
+    type: tx.type,
+    amount: tx.amount
+  }));
+
+  const grouped = {};
+  for (const row of df) {
+    if (!grouped[row.month]) grouped[row.month] = { expense: 0, income: 0 };
+    grouped[row.month][row.type] += row.amount;
+  }
+
+  const rawLabels = Object.keys(grouped).sort();
+  const labels = rawLabels.map(m => {
+    const [year, month] = m.split('-');
+    return `${MONTH_NAMES_NOMINATIVE[Number(month) - 1]} ${year}`;
+  });
+
+  const expensesByMonth = rawLabels.map(m => Math.abs(grouped[m].expense || 0));
+  const incomeByMonth   = rawLabels.map(m => grouped[m].income || 0);
+
+  const ctx = document.getElementById('incomeVsExpenseChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Доходы',
+          data: incomeByMonth,
+          borderColor: 'green',
+          backgroundColor: 'rgba(0,128,0,0.1)',
+          tension: 0.3,
+          borderWidth: 2,
+          pointRadius: 4,
+          fill: false
+        },
+        {
+          label: 'Расходы',
+          data: expensesByMonth,
+          borderColor: 'red',
+          backgroundColor: 'rgba(255,0,0,0.1)',
+          tension: 0.3,
+          borderWidth: 2,
+          pointRadius: 4,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
       plugins: {
         legend: { position: 'top' }
+      },
+      scales: {
+        y: {
+          title: { display: true, text: '₽' }
+        },
+        x: {
+          title: { display: true, text: 'Месяц' }
+        }
       }
     }
   });
+  generateTrendSummary(labels, incomeByMonth, expensesByMonth);
+
+}
+
+function addNextMonthLabel(currentMonthStr, offset = 1) {
+  const [year, month] = currentMonthStr.split('-').map(Number);
+  const d = new Date(year, month - 1 + offset);
+  return d.toISOString().slice(0, 7);
+}
+async function renderMonthlyForecastChart() {
+
+  const expenses = ALL_TRANSACTIONS
+    .filter(tx => tx.type === 'expense' && tx.date && tx.amount)
+    .map(tx => ({
+      date: tx.date,
+      amount: Math.abs(tx.amount)
+    }));
+
+  const res = await fetch('http://localhost:5002/forecast', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ expenses })
+  });
+
+  const result = await res.json();
+  const history = result.history;
+  const forecast = result.forecast;
+
+  // Функция для форматирования "2025-01" → "Январь 2025"
+  const formatMonth = str => {
+    const [year, month] = str.split('-');
+    return `${MONTH_NAMES[+month - 1]} ${year}`;
+  };
+
+  const labels = history.map(m => formatMonth(m.month_str));
+  const values = history.map(m => m.amount);
+
+  const forecastLabels = forecast.map((_, i) => {
+    const [lastYear, lastMonth] = history[history.length - 1].month_str.split('-').map(Number);
+    const d = new Date(lastYear, lastMonth - 1 + i + 1);
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const y = d.getFullYear();
+    return formatMonth(`${y}-${m}`);
+  });
+
+  const forecastValues = forecast;
+
+  const allLabels = [...labels, ...forecastLabels];
+  const historyLine = [...values, ...Array(forecast.length).fill(null)];
+  const forecastLine = [...Array(values.length).fill(null), ...forecastValues];
+
+  const ctx = document.getElementById('monthlyChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: allLabels,
+      datasets: [
+        {
+          label: 'Сумма трат по месяцам',
+          data: historyLine,
+          borderColor: '#0066cc',
+          backgroundColor: 'rgba(0, 102, 204, 0.1)',
+          borderWidth: 3,
+          pointRadius: 4,
+          fill: false,
+          tension: 0.4
+        },
+        {
+          label: 'Прогноз на следующие месяцы',
+          data: forecastLine,
+          borderColor: '#ff9933',
+          backgroundColor: 'rgba(255, 153, 51, 0.1)',
+          borderWidth: 3,
+          pointRadius: 5,
+          fill: false,
+          tension: 0.4
+        }
+      ]
+    },
+    options: {
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            font: { size: 14 },
+            color: '#333'
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { font: { size: 12 }, color: '#444' }
+        },
+        y: {
+          title: {
+            display: true,
+            text: '₽',
+            font: { size: 14 },
+            color: '#444'
+          },
+          ticks: { font: { size: 12 }, color: '#444' }
+        }
+      }
+    }
+  });
+
+  const ctx2 = document.getElementById('barForecastChart').getContext('2d');
+  new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: allLabels,
+      datasets: [
+        {
+          label: 'Траты',
+          data: historyLine,
+          backgroundColor: 'rgba(0, 102, 204, 0.6)'
+        },
+        {
+          label: 'Прогноз',
+          data: forecastLine,
+          backgroundColor: 'rgba(255, 153, 51, 0.6)'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' }
+      },
+      scales: {
+        x: { stacked: true },
+        y: {
+          stacked: true,
+          title: { display: true, text: '₽' }
+        }
+      }
+    }
+  });
+}
+
+
+function addNextMonthLabel(currentMonthStr, offset = 1) {
+  const [year, month] = currentMonthStr.split('-').map(Number);
+  const d = new Date(year, month - 1 + offset);
+  return d.toISOString().slice(0, 7);
+}
+
+
+function addNextMonthLabel(currentMonthStr, offset = 1) {
+  const [year, month] = currentMonthStr.split('-').map(Number);
+  const d = new Date(year, month - 1 + offset);
+  return d.toISOString().slice(0, 7);
+}
+
+async function getForecastFromServer(expenses) {
+  try {
+    const res = await fetch('http://localhost:5002/forecast', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ expenses })
+    });
+
+    const contentType = res.headers.get('Content-Type') || '';
+    const text = await res.text();
+
+    if (!res.ok) throw new Error(text);
+    if (!contentType.includes('application/json')) throw new Error('Не JSON');
+
+    return JSON.parse(text).forecast;
+  } catch (err) {
+    console.error('Ошибка прогноза:', err);
+    return [];
+  }
 }
 
 
@@ -386,6 +716,7 @@ function extractOzonTransactions(text) {
   }
   return transactions;
 }
+
 
 
 // Функция для извлечения транзакций и остатка из выписки ОЗОН
@@ -662,5 +993,38 @@ function extractYandexTransactionsWithRemainder(text) {
     remainderDate: remainder.remainderDate,
     remainderValue: remainder.remainderValue
   };
+}
+function generateTrendSummary(labels, incomeData, expenseData) {
+  const summaryEl = document.getElementById('trend-summary');
+  if (!summaryEl) return;
+
+  summaryEl.innerHTML = ''; // Очистка
+
+  const addText = (type, change, month) => {
+    const action = change > 0 ? 'выросли' : 'упали';
+    const percent = Math.abs(change).toFixed(1);
+    const text = `${type === 'Доходы' ? 'Доходы' : 'Расходы'} ${action} на ${percent}% в ${month}`;
+    const p = document.createElement('p');
+    p.textContent = text;
+    summaryEl.appendChild(p);
+  };
+
+  for (let i = 1; i < labels.length; i++) {
+    const prev = incomeData[i - 1], curr = incomeData[i];
+    if (prev > 0) {
+      const diff = ((curr - prev) / prev) * 100;
+      if (Math.abs(diff) >= 10) {
+        addText('Доходы', diff, labels[i]);
+      }
+    }
+
+    const prevExp = expenseData[i - 1], currExp = expenseData[i];
+    if (prevExp > 0) {
+      const diffExp = ((currExp - prevExp) / prevExp) * 100;
+      if (Math.abs(diffExp) >= 10) {
+        addText('Расходы', diffExp, labels[i]);
+      }
+    }
+  }
 }
 

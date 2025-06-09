@@ -287,3 +287,55 @@ h1 {
   font-size: 1rem;
   color: #222;
 }
+.instruction-block {
+  background: #ffffff;
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  border-radius: 16px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+  border-left: 6px solid #8e2de2; /* Фиолетовый акцент */
+  transition: box-shadow 0.3s ease;
+}
+
+.instruction-block:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.instruction-block h2 {
+  font-size: 22px;
+  margin-bottom: 14px;
+  color: #1c1c1e;
+}
+
+.instruction-block ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.instruction-block ul li {
+  margin-bottom: 12px;
+  position: relative;
+  padding-left: 24px;
+}
+
+.instruction-block ul li::before {
+  content: "➤";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #6931d1;
+  font-size: 16px;
+}
+
+.instruction-block a {
+  color: #6931d1;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.instruction-block a:hover {
+  text-decoration: underline;
+  color: #8e2de2;
+}
