@@ -1,13 +1,13 @@
-// файл: content/manual-operations.js
+// File: content/manual-operations.js
 
 // Эндпоинты
 const GET_OPS_URL   = 'content/manuals_opertions/get_manual_operations.php';
 const SAVE_OP_URL   = 'content/manuals_opertions/save_manual_operation.php';
 const DELETE_OP_URL = 'content/manuals_opertions/delete_manual_operation.php';
 
-
-
-function el(id) { return document.getElementById(id); }
+function el(id) {
+  return document.getElementById(id);
+}
 
 function renderOperation(op) {
   const list = el('operations-list');
@@ -28,16 +28,12 @@ function renderOperation(op) {
   list.prepend(card);
 }
 
-// content/manual-operations.js
-
 async function loadOperations() {
   const list = el('operations-list');
-  if (!list) return;         // <-- нет контейнера — выходим
-
-  list.innerHTML = '';        // очищаем старые записи
-
+  if (!list) return;
+  list.innerHTML = '';
   try {
-    const res = await fetch(GET_OPS_URL, { credentials: 'include' });
+    const res  = await fetch(GET_OPS_URL, { credentials: 'include' });
     const data = await res.json();
     if (data.status !== 'success') throw new Error(data.message || 'Ошибка загрузки');
     data.operations.forEach(renderOperation);
@@ -46,13 +42,12 @@ async function loadOperations() {
   }
 }
 
-
 async function saveOperation(op) {
-  const res = await fetch(SAVE_OP_URL, {
-    method: 'POST',
+  const res  = await fetch(SAVE_OP_URL, {
+    method:      'POST',
     credentials: 'include',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify(op)
+    headers:     { 'Content-Type': 'application/json' },
+    body:        JSON.stringify(op)
   });
   const data = await res.json();
   if (data.status !== 'success') throw new Error(data.message);
@@ -60,20 +55,19 @@ async function saveOperation(op) {
 }
 
 async function deleteOperation(id) {
-  const res = await fetch(DELETE_OP_URL, {
-    method: 'POST',
+  const res  = await fetch(DELETE_OP_URL, {
+    method:      'POST',
     credentials: 'include',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ id })
+    headers:     { 'Content-Type': 'application/json' },
+    body:        JSON.stringify({ id })
   });
   const data = await res.json();
   if (data.status !== 'success') throw new Error(data.message);
 }
 
-// вешаем логику Add и Delete
 function initFormAndDelete() {
-  // Добавление
-  const addBtn = document.querySelector('.btn-add');
+  // Добавление — только в manual-filter
+  const addBtn = document.querySelector('.manual-filter .btn-add');
   if (addBtn) {
     addBtn.addEventListener('click', async () => {
       const op = {
@@ -85,28 +79,26 @@ function initFormAndDelete() {
       try {
         const saved = await saveOperation(op);
         renderOperation(saved);
-        el('op-date').value = '';
+        el('op-date').value     = '';
         el('op-category').selectedIndex = 0;
-        el('op-amount').value = '';
-        el('op-type').selectedIndex = 0;
+        el('op-amount').value   = '';
+        el('op-type').selectedIndex     = 0;
       } catch (e) {
         alert('Ошибка добавления: ' + e.message);
       }
     });
   }
 
-  // Удаление (делегирование)
+  // Удаление (делегирование) — общий селектор OK
   const opsList = el('operations-list');
   if (opsList) {
     opsList.addEventListener('click', async e => {
       const btn = e.target.closest('.btn-delete');
       if (!btn) return;
-      const id = btn.dataset.id;
       if (!confirm('Удалить операцию?')) return;
       try {
-        await deleteOperation(id);
-        const card = btn.closest('.statement-item');
-        card && card.remove();
+        await deleteOperation(btn.dataset.id);
+        btn.closest('.statement-item')?.remove();
       } catch (e) {
         alert('Ошибка удаления: ' + e.message);
       }
@@ -114,16 +106,13 @@ function initFormAndDelete() {
   }
 }
 
+// MutationObserver ждёт появления manual-filter и инициализирует
 const opsObserver = new MutationObserver(() => {
-  const panel = document.querySelector('.statements-filter');
-  if (!panel) return;
-
-  if (!panel.dataset.inited) {
-    panel.dataset.inited = '1';
-    initFormAndDelete();
-    loadOperations();        // еднократный старт
-  }
-  // дальше loadOperations() больше не будет дергаться
+  const panel = document.querySelector('.manual-filter');
+  if (!panel || panel.dataset.inited) return;
+  panel.dataset.inited = '1';
+  initFormAndDelete();
+  loadOperations();
 });
 
 opsObserver.observe(document.body, { childList: true, subtree: true });

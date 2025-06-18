@@ -31,11 +31,20 @@
     <div class="chart-wrapper">
   <canvas id="dailyChart"></canvas>
 </div>
-<canvas id="monthlyChart" height="200" style="margin-top: 40px;"></canvas>
-<canvas id="barForecastChart" height="200" style="margin-top: 40px;"></canvas>
-<canvas id="monthlyChart" height="200" style="margin-top: 40px;"></canvas>
-<canvas id="incomeVsExpenseChart" height="200" style="margin-top: 40px;"></canvas>
-<canvas id="incomeVsExpenseBarChart" height="200" style="margin-top: 40px;"></canvas>
+<div class="chart-card">
+  <h3 class="chart-title">Динамика по месяцам и прогноз трат (линия)</h3>
+  <canvas id="monthlyChart" height="200"></canvas>
+</div>
+<h3 class="chart-title">Динамика по месяцам и прогноз трат (столбцы)</h3>
+<canvas id="barForecastChart" height="200"></canvas>
+
+
+
+<h3 class="chart-title">Доходы vs Расходы (линия)</h3>
+<canvas id="incomeVsExpenseChart" height="200"></canvas>
+
+<h3 class="chart-title">Доходы vs Расходы (столбцы)</h3>
+<canvas id="incomeVsExpenseBarChart" height="200"></canvas>
 <p id="analytics-summary" style="margin-top: 20px; font-weight: 500;"></p>
 <div id="trend-summary" class="trend-summary"></div>
 
