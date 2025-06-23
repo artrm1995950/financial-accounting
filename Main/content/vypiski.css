@@ -1,11 +1,11 @@
-/* Файл: styles/vypiski.css */
+
 
 .content {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
-/* кнопка «Удалить» — стилизована как .btn-download */
+
 .btn-delete {
   padding: 8px 16px;
   border: none;
@@ -15,7 +15,7 @@
   cursor: pointer;
   font-size: 0.9rem;
   transition: background-color 0.2s;
-  /* для расстояния от соседней кнопки */
+ 
   margin-left: 8px;
 }
 
@@ -29,7 +29,7 @@ h1 {
   text-align: center;
 }
 
-/* Панель фильтров */
+
 .vypiski-filters {
   display: flex;
   flex-wrap: wrap;
@@ -74,7 +74,7 @@ h1 {
   background-color: #45a049;
 }
 
-/* Список выписок */
+
 .vypiski-list {
   display: flex;
   flex-direction: column;
@@ -128,7 +128,7 @@ h1 {
 .statement-amount.income {
   color: #2e7d32;
 }
-/* Скопировано из .btn-download, но для .btn-delete */
+
 
 
 .btn-download {
@@ -146,7 +146,7 @@ h1 {
   background-color: #1976D2;
 }
 
-/* Адаптив */
+
 @media (max-width: 600px) {
   .vypiski-filters {
     flex-direction: column;
@@ -172,7 +172,7 @@ h1 {
 .statements-filter {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.8); /* полупрозрачный фон */
+  background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(4px);
   border-radius: 8px;
   padding: 16px;
@@ -210,13 +210,13 @@ h1 {
 
 .btn-primary,
 .btn-add {
-  background: #7c3aed; /* фиолетовый, как на прошлой форме */
+  background: #7c3aed;
   color: #fff;
 }
 
 .btn-secondary,
 .btn-download {
-  background: #3b82f6; /* синий для кнопки «Скачать» */
+  background: #3b82f6;
   color: #fff;
 }
 
@@ -255,13 +255,13 @@ h1 {
   cursor: pointer;
   font-size: 0.9rem;
   transition: background-color 0.2s;
-  margin-left: 8px; /* чтобы отступ от кнопки «Скачать» */
+  margin-left: 8px;
 }
 
 .btn-delete:hover {
   background-color: #1976D2;
 }
-/* content/stock-chart.css */
+
 
 #comments-list {
   max-width: 900px;
@@ -293,7 +293,7 @@ h1 {
   margin-bottom: 24px;
   border-radius: 16px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
-  border-left: 6px solid #8e2de2; /* Фиолетовый акцент */
+  border-left: 6px solid #8e2de2;
   transition: box-shadow 0.3s ease;
 }
 

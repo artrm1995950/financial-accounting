@@ -1,12 +1,12 @@
-/* файл: vypiski.css */
 
-/* Обёртка секции */
+
+
 .statements-section {
   padding: 50px 20px;
   background: #e2e8f0;
 }
 
-/* Заголовок */
+
 .statements-section .title {
   font-size: 2.2rem;
   font-weight: 700;
@@ -26,7 +26,7 @@
   cursor: pointer;
   transform: translateY(0);
   transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-  margin-left: 8px; /* если нужен отступ от соседней кнопки */
+  margin-left: 8px;
 }
 
 .btn-delete:hover {
@@ -35,7 +35,7 @@
   box-shadow: 0 6px 16px rgba(124,58,237,0.3);
 }
 
-/* === Фильтр добавления выписки === */
+
 .statements-filter {
   max-width: 900px;
   margin: 0 auto 40px;
@@ -43,13 +43,13 @@
   border-radius: 16px;
   padding: 20px 24px;
   display: flex;
-  align-items: center; /* выравнивание по центру вертикально */
+  align-items: center;
   position: relative;
   box-shadow: 0 8px 24px rgba(0,0,0,0.1);
   overflow: hidden;
 }
 
-/* Базовые стили для .field-row */
+
 .field-row {
   display: flex;
   flex-direction: column;
@@ -57,19 +57,19 @@
   color: #334155;
 }
 
-/* Разделители между полями */
+
 .field-row + .field-row {
   margin-left: 24px;
   padding-left: 24px;
   border-left: 1px solid #e2e8f0;
 }
 
-/* Лейблы */
+
 .field-row label {
   margin-bottom: 6px;
 }
 
-/* Дата и Банк: фиксированные размеры */
+
 .statements-filter .input-date,
 .statements-filter .input-select {
   width: 160px;
@@ -87,7 +87,7 @@
   outline: none;
 }
 
-/* === Файловое поле === */
+
 .field-row.file-row {
   width: 240px;
 }
@@ -125,13 +125,13 @@
 }
 
 
-/* === Кнопка «Добавить» === */
+
 .btn-add {
-  /* убираем абсолютное позиционирование */
+ 
   position: static;
   margin-left: 16px;
   transform: translateY(0);
-  /* сохраняем стили и анимацию */
+ 
   padding: 12px 24px;
   background: #7c3aed;
   color: #fff;
@@ -148,7 +148,7 @@
   box-shadow: 0 6px 16px rgba(124,58,237,0.3);
 }
 
-/* === Унификация стилей для кнопок скачивания === */
+
 .btn-download {
   margin-right: 40px;
    margin-left: 12px;
@@ -169,7 +169,7 @@
   box-shadow: 0 6px 16px rgba(124,58,237,0.3);
 }
 
-/* === Список выписок === */
+
 .statements-list {
   max-width: 900px;
   margin: 0 auto;
@@ -193,25 +193,24 @@
 .statement-item {
   display: flex;
   align-items: center;
-  /* убираем justify-content: space-between, 
-     иначе grid не растянется */
-  /* justify-content: space-between; */
+ 
+ 
 }
 .statement-info {
-  flex: 1;                  /* РАСТЯГИВАЕМ grid на всё доступное место */
+  flex: 1;                 
   display: grid;
   grid-template-columns:
-    minmax(0, 1fr)  /* имя файла – всё что осталось */
-    160px            /* банк – фикс */
-    100px;           /* дата – фикс */
+    minmax(0, 1fr) 
+    160px           
+    100px;          
   gap: 32px;
   align-items: center;
 }
 
 .statement-info .file-name {
-  white-space: nowrap;       /* всё в одну строку */
-  overflow: hidden;          /* скрыть излишки */
-  text-overflow: ellipsis;   /* добавить «…» */
+  white-space: nowrap;      
+  overflow: hidden;         
+  text-overflow: ellipsis;  
 }
 
 .statement-info .bank-name {
@@ -227,7 +226,7 @@
   margin-bottom: 24px;
   border-radius: 16px;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
-  border-left: 6px solid #8e2de2; /* Фиолетовый акцент */
+  border-left: 6px solid #8e2de2;
   transition: box-shadow 0.3s ease;
 }
 

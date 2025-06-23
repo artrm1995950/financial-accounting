@@ -1,5 +1,5 @@
 <?php
-// update_userSocial_profile.php
+
 
 error_reporting(0);
 header('Content-Type: application/json; charset=utf-8');
@@ -12,7 +12,7 @@ if (empty($_SESSION['user_id'])) {
 }
 $userId = (int)$_SESSION['user_id'];
 
-// Проверяем POST-параметр social_link
+
 if (!isset($_POST['social_link'])) {
     http_response_code(400);
     echo json_encode(['status'=>'error','message'=>'Не передана ссылка']);
@@ -20,7 +20,7 @@ if (!isset($_POST['social_link'])) {
 }
 $social = trim($_POST['social_link']);
 
-// Подключение
+
 define('DB_HOST','localhost');
 define('DB_USER','root');
 define('DB_PASSWORD','password');
@@ -34,7 +34,7 @@ if ($mysqli->connect_error) {
 }
 $mysqli->set_charset('utf8mb4');
 
-// Вставка или апдейт через INSERT...ON DUPLICATE KEY UPDATE
+
 $sql = "
   INSERT INTO `user_profiles` (user_id, social_link)
   VALUES (?, ?)
@@ -54,7 +54,7 @@ if (!$stmt->execute()) {
     exit;
 }
 
-// Успех
+
 echo json_encode(['status'=>'success','message'=>'Ссылка сохранена','social_link'=>$social]);
 
 $stmt->close();

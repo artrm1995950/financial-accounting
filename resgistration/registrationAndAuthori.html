@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login & Register</title>
         <link rel="stylesheet" href="RegistrationStyles.css">
-        <script src="scriptRegistration.js" defer></script> <!-- Подключаем внешний JS файл -->
+        <script src="scriptRegistration.js" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     </head>
     
@@ -34,7 +34,6 @@
                     <div class="form-group">
                         <button id="reset-password-btn" type="button" onclick="showResetPassword()">Сброс пароля</button>
                     </div>
-                  <!-- Поле для сброса пароля, скрыто по умолчанию -->
                    <div class="form-group" id="reset-email-container" style="display: none;">
                          <input type="email" id="reset-email" placeholder="Адрес электронной почты для сброса пароля" />
                             <span id="reset-email-error" class="error-message"></span>
@@ -65,12 +64,10 @@
                 </form>
                 
                 
-                <!-- Сообщение о том, что код отправлен -->
                 <div id="email-sent-message" style="display: none; color: black; margin-top: 10px;">
                     <p>Проверочный код был отправлен на вашу почту!</p>
                 </div>
                 
-                <!-- Поле для ввода кода -->
                 <div id="verification-section" style="display: none;">
                     <div class="form-group">
                         <input type="text" id="verification-code" placeholder="Введите код">

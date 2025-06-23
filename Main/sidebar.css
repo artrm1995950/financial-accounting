@@ -1,4 +1,4 @@
-/* sidebar.css (обновлено) */
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
 body {
   margin: 0;
@@ -7,7 +7,7 @@ body {
   display: flex;
   height: 100vh;
 }
-/* 1) Пусть body будет флексом: sidebar + content */
+
 
 body {
   display: flex;
@@ -15,23 +15,23 @@ body {
   margin: 0;
 }
 
-/* 2) Sidebar фиксированной ширины */
+
 aside.sidebar {
-  width: 260px;   /* подкорректируйте под свой sidebar.css */
+  width: 260px;  
   flex-shrink: 0;
 }
 
-/* 3) Контент‑область растягивается и получает фон */
+
 #content {
   flex: 1;
 
-  overflow-y: auto;         /* если много контента */
+  overflow-y: auto;        
 }
 
-/* 4) Внутри content — уже ваши AJAX‑вставки, у них можно убрать фон */
+
 .content-area main {
-  background: transparent;  /* убираем если что-то наследовалось */
-  padding: 40px;            /* если нужен отступ вокруг карточки */
+  background: transparent; 
+  padding: 40px;           
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -53,7 +53,7 @@ aside.sidebar {
 .user-email {
   font-size: 14px;
   font-weight: 600;
-  color: #9c27b0; /* пурпурный */
+  color: #9c27b0;
   padding: 10px 16px;
   margin-bottom: 24px;
   border-radius: 12px;
@@ -96,7 +96,7 @@ aside.sidebar {
               inset -2px -2px 6px rgba(255,255,255,0.9);
 }
 .menu-item.active {
-  /* sunset gradient + neon glow */
+ 
   background: linear-gradient(135deg, #8e2de2 0%, #c648c0 50%, #e66465 100%);
   color: #ffffff;
   box-shadow: 0 4px 16px rgba(230,100,101,0.3),

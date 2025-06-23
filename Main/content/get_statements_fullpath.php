@@ -1,5 +1,4 @@
 <?php
-// файл: content/get_statements_fullpath.php
 
 session_start();
 header('Content-Type: application/json; charset=utf-8');

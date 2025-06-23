@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Подключение к базе данных
+
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASSWORD', 'password');
@@ -25,13 +25,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
-        // Лучше — password_verify(), если храните хеш
+        
             if ($password === $user['password']) {
                 
 
-            // Авторизация успешна
+            
             $_SESSION['user_id'] = $user['id'];
-            $_SESSION['email']   = $email;         // ← исправлено
+            $_SESSION['email']   = $email;         
             $_SESSION['name']    = $user['name'];
             echo "Авторизация успешна!";
         } else {

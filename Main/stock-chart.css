@@ -1,4 +1,4 @@
-/* content/stock-chart.css */
+
 body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
 #controls { max-width: 900px; margin: 0 auto 20px; display: flex; gap: 10px; align-items: center; }
 #ticker-select { padding: 8px 12px; font-size: 16px; }
@@ -8,29 +8,29 @@ body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  /* задаём вёрсткой нужную высоту: */
+ 
   height: 400px; 
    padding: 20px;
-  padding-bottom: 100px;   /* освобождаем место снизу для кнопок */
-  height: 455px;           /* либо 60vh, как вам удобнее */
+  padding-bottom: 100px;  
+  height: 455px;          
   position: relative;  
 }
 canvas { display: block; }
 #loading { text-align: center; color: #666; margin-top: 10px; }
 #period-buttons {
-  display: flex;          /* строчный флекс */
-  flex-wrap: nowrap;      /* без переноса */
+  display: flex;         
+  flex-wrap: nowrap;     
   gap: 5px;
   justify-content: center;
   margin: 10px auto 0;
   max-width: 900px;
-  overflow-x: none;       /* если не помещается — появится скролл */
-  padding-bottom: 10px;   /* чуть отступ снизу */
+  overflow-x: none;      
+  padding-bottom: 10px;  
 }
 
-/* Убираем border-radius, чтобы соседние кнопки не "слипались" */
+
 .period-btn {
-  flex: 0 0 auto;         /* не растягивается, не сжимается */
+  flex: 0 0 auto;        
   padding: 6px 12px;
   border: 1px solid #ccc;
   background: #f9f9f9;
@@ -38,11 +38,11 @@ canvas { display: block; }
   font-size: 14px;
 }
 
-/* Слегка скруглим только внешние края для красоты */
+
 .period-btn:first-child { border-radius: 4px 0 0 4px; }
 .period-btn:last-child  { border-radius: 0 4px 4px 0; }
 
-/* Активная кнопка */
+
 .period-btn.active {
   background: #7c3aed;
   color: #fff;
@@ -50,9 +50,9 @@ canvas { display: block; }
 }
 
 #chart-container canvas {
-  /* заставляем canvas растянуться по высоте контейнера */
+ 
  width: 100% !important;
-  height: calc(100% - 60px) !important; /* оставьте немного места под заголовок/отметки */
+  height: calc(100% - 60px) !important;
 }/* Контейнер выбора тикера */
 #controls {
   max-width: 900px;
@@ -62,14 +62,14 @@ canvas { display: block; }
   gap: 10px;
 }
 
-/* Стили для label */
+
 #controls label {
   font-weight: 500;
   font-size: 1rem;
   color: #333;
 }
 
-/* Стили для селектора тикера */
+
 #ticker-select {
   padding: 8px 12px;
   font-size: 1rem;
@@ -84,7 +84,7 @@ canvas { display: block; }
   box-shadow: 0 0 0 3px rgba(124,58,237,0.2);
 }
 
-/* Группа кнопок периодов под графиком */
+
 #period-buttons {
   max-width: 900px;
   margin: 10px auto 0;
@@ -93,7 +93,7 @@ canvas { display: block; }
   justify-content: center;
 }
 
-/* Базовые стили кнопок */
+
 .period-btn {
   padding: 8px 16px;
   font-size: 0.95rem;
@@ -105,12 +105,12 @@ canvas { display: block; }
   transition: background .2s, border-color .2s, color .2s;
 }
 
-/* Соседние кнопки чуть «сжатые» */
+
 .period-btn + .period-btn {
   margin-left: -1px;
 }
 
-/* Hover и активное состояние */
+
 .period-btn:hover {
   background: #f0f0f0;
 }
@@ -119,7 +119,7 @@ canvas { display: block; }
   color: #fff;
   border-color: #7c3aed;
 }
-/* в конец файла */
+
 
 #ticker-input {
   padding: 8px 12px;
@@ -150,7 +150,7 @@ canvas { display: block; }
 #ticker-btn:hover {
   background: #5a1ea5;
 }
-/* ---- Форма комментариев ---- */
+
 #comment-form {
   max-width: 900px;
   margin: 20px auto;
@@ -207,7 +207,7 @@ canvas { display: block; }
 #comment-submit:hover {
   background-color: #5a1ea5;
 }
-/* content/stock-chart.css */
+
 
 #comments-list {
   max-width: 900px;

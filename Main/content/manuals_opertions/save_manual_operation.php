@@ -1,23 +1,23 @@
 <?php
-// save_manual_operation.php
+
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 
-// проверка авторизации
+
 if (empty($_SESSION['user_id'])) {
     http_response_code(401);
     echo json_encode(['status'=>'error','message'=>'Не авторизованы']);
     exit;
 }
 
-// получаем JSON из тела
+
 $input = json_decode(file_get_contents('php://input'), true);
 $date     = trim($input['date']     ?? '');
 $category = trim($input['category'] ?? '');
 $amount   = trim($input['amount']   ?? '');
 $type     = trim($input['type']     ?? '');
 
-// если дата не указана — ставим сегодня
+
 if ($date === '') {
     $date = date('Y-m-d');
 }
@@ -42,7 +42,7 @@ $mysqli->set_charset('utf8mb4');
 
 $userId = (int)$_SESSION['user_id'];
 
-// вставка
+
 $sql = "INSERT INTO manual_operations 
           (user_id, op_date, category, amount, type, created_at)
         VALUES (?, ?, ?, ?, ?, NOW())";

@@ -1,11 +1,11 @@
 <?php
-// update_userNick_profile.php
+
 
 error_reporting(0);
 header('Content-Type: application/json; charset=utf-8');
 session_start();
 
-// 1) Проверяем авторизацию
+
 if (empty($_SESSION['user_id'])) {
     http_response_code(401);
     echo json_encode(['status'=>'error','message'=>'Не авторизованы']);
@@ -13,7 +13,7 @@ if (empty($_SESSION['user_id'])) {
 }
 $userId = (int)$_SESSION['user_id'];
 
-// 2) Получаем и валидируем nickname
+
 if (!isset($_POST['nickname']) || trim($_POST['nickname']) === '') {
     http_response_code(400);
     echo json_encode(['status'=>'error','message'=>'Никнейм не может быть пустым']);
@@ -21,7 +21,7 @@ if (!isset($_POST['nickname']) || trim($_POST['nickname']) === '') {
 }
 $nick = trim($_POST['nickname']);
 
-// 3) Подключаемся к БД
+
 define('DB_HOST','localhost');
 define('DB_USER','root');
 define('DB_PASSWORD','password');
@@ -35,7 +35,7 @@ if ($mysqli->connect_error) {
 }
 $mysqli->set_charset('utf8mb4');
 
-// 4) Вставка или обновление через INSERT ... ON DUPLICATE KEY UPDATE
+
 $sql = "
   INSERT INTO `user_profiles` (user_id, nickname)
   VALUES (?, ?)
@@ -54,7 +54,7 @@ if (!$stmt->execute()) {
     exit;
 }
 
-// 5) Успешный ответ
+
 echo json_encode([
   'status'   => 'success',
   'message'  => 'Никнейм сохранён',

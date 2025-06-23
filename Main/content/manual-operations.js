@@ -1,6 +1,6 @@
-// File: content/manual-operations.js
 
-// Эндпоинты
+
+
 const GET_OPS_URL   = 'content/manuals_opertions/get_manual_operations.php';
 const SAVE_OP_URL   = 'content/manuals_opertions/save_manual_operation.php';
 const DELETE_OP_URL = 'content/manuals_opertions/delete_manual_operation.php';
@@ -66,7 +66,7 @@ async function deleteOperation(id) {
 }
 
 function initFormAndDelete() {
-  // Добавление — только в manual-filter
+  
   const addBtn = document.querySelector('.manual-filter .btn-add');
   if (addBtn) {
     addBtn.addEventListener('click', async () => {
@@ -89,7 +89,7 @@ function initFormAndDelete() {
     });
   }
 
-  // Удаление (делегирование) — общий селектор OK
+  
   const opsList = el('operations-list');
   if (opsList) {
     opsList.addEventListener('click', async e => {
@@ -106,7 +106,7 @@ function initFormAndDelete() {
   }
 }
 
-// MutationObserver ждёт появления manual-filter и инициализирует
+
 const opsObserver = new MutationObserver(() => {
   const panel = document.querySelector('.manual-filter');
   if (!panel || panel.dataset.inited) return;

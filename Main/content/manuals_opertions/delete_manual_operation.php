@@ -1,16 +1,16 @@
 <?php
-// delete_manual_operation.php
+
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 
-// проверка авторизации
+
 if (empty($_SESSION['user_id'])) {
     http_response_code(401);
     echo json_encode(['status'=>'error','message'=>'Не авторизованы']);
     exit;
 }
 
-// читаем JSON
+
 $input = json_decode(file_get_contents('php://input'), true);
 $id = isset($input['id']) ? (int)$input['id'] : 0;
 if ($id <= 0) {

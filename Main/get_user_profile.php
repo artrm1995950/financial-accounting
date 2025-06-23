@@ -1,9 +1,9 @@
 <?php
-// get_user_profile.php
+
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 
-// проверка авторизации
+
 if (empty($_SESSION['user_id'])) {
     http_response_code(401);
     echo json_encode(['status'=>'error','message'=>'Не авторизованы']);
@@ -11,7 +11,7 @@ if (empty($_SESSION['user_id'])) {
 }
 $userId = (int)$_SESSION['user_id'];
 
-// подключение
+
 define('DB_HOST','localhost');
 define('DB_USER','root');
 define('DB_PASSWORD','password');
@@ -25,7 +25,7 @@ if ($mysqli->connect_error) {
 }
 $mysqli->set_charset('utf8mb4');
 
-// собираем данные из users + user_profiles
+
 $sql = <<<SQL
 SELECT 
     u.full_name,
@@ -46,7 +46,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if (!$row = $result->fetch_assoc()) {
-    // на всякий случай — если записи нет, возвращаем пустые поля
+    
     $row = [
       'full_name'   => '',
       'email'       => '',

@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>График по акциям MOEX</title>
-  <!-- Chart.js и плагины -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment.min.js"></script>
@@ -22,7 +21,6 @@
     }
     canvas { display: block; }
     #loading { text-align: center; color: #666; margin-top: 10px; }
-    /* стили кнопок периодов */
     #period-buttons { text-align: center; margin-top: 10px; display: inline-flex; gap: 5px; }
     .period-btn {
       padding: 6px 12px;
@@ -65,7 +63,6 @@
   </div>
 
   <script>
-    // Получаем список всех тикеров MOEX
     async function fetchTickers() {
       const resp = await fetch('https://iss.moex.com/iss/engines/stock/markets/shares/securities.json?iss.meta=off');
       const json = await resp.json();
@@ -81,7 +78,6 @@
       });
     }
 
-    // Подгружаем все данные по тикеру за 2022–2025
     async function loadChartData(ticker) {
       const years = [2022, 2023, 2024, new Date().getFullYear()];
       const allData = [];
@@ -109,7 +105,6 @@
       return allData;
     }
 
-    // Фильтруем по выбранному периоду
     function filterByPeriod(data, period) {
       const end = new Date();
       let start;
@@ -145,20 +140,17 @@
 
     let chart, rawData = [];
 
-    // Построение графика и обновление заголовка
     function renderChart(ticker, data) {
       const labels = data.map(i => i.date);
       const values = data.map(i => i.close);
       const lastPrice = values[values.length - 1] || 0;
 
-      // Форматируем текущее время
       const now = new Date();
       const timestamp = now.toLocaleString('ru-RU', {
         year: 'numeric', month: '2-digit', day: '2-digit',
         hour: '2-digit', minute: '2-digit', second: '2-digit'
       });
 
-      // Обновляем заголовок
       document.getElementById('chart-title').textContent =
         `${ticker}: ${lastPrice.toFixed(2)} ₽ (данные на ${timestamp})`;
 
@@ -242,7 +234,6 @@
       document.getElementById('sberChart').hidden = false;
     }
 
-    // Обновляем данные и график для выбранных тикера и периода
     async function updateChart() {
       const ticker = document.getElementById('ticker-select').value;
       const activeBtn = document.querySelector('.period-btn.active');
@@ -257,11 +248,9 @@
       renderChart(ticker, filtered);
     }
 
-    // Инициализация
     (async () => {
       await fetchTickers();
 
-      // навешиваем события на кнопки
       document.querySelectorAll('.period-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
@@ -270,14 +259,11 @@
         });
       });
 
-      // задаем активную кнопку по умолчанию — 1 месяц
       const defaultBtn = document.querySelector(`.period-btn[data-period="1m"]`);
       if (defaultBtn) defaultBtn.classList.add('active');
 
-      // событие на смену тикера сразу обновляет график
       document.getElementById('ticker-select').addEventListener('change', updateChart);
 
-      // первый рендер
       await updateChart();
     })().catch(err => {
       console.error(err);

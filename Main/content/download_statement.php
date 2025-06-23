@@ -1,16 +1,16 @@
 <?php
-// файл: content/download_statement.php
+
 
 session_start();
 header('Content-Type: application/octet-stream; charset=utf-8');
 
-// 1) Авторизация
+
 if (empty($_SESSION['user_id'])) {
     http_response_code(403);
     exit('Forbidden');
 }
 
-// 2) Проверяем GET-параметр id
+
 if (!isset($_GET['id'])) {
     http_response_code(400);
     exit('Bad Request');
@@ -21,7 +21,7 @@ if ($id <= 0) {
     exit('Bad Request');
 }
 
-// 3) Подключаемся к БД
+
 $db = new mysqli('localhost','root','password','finychet');
 if ($db->connect_error) {
     http_response_code(500);
@@ -29,7 +29,7 @@ if ($db->connect_error) {
 }
 $db->set_charset('utf8mb4');
 
-// 4) Получаем путь к файлу и оригинальное имя
+
 $stmt = $db->prepare("
     SELECT file_path
       FROM user_files
@@ -50,10 +50,10 @@ if (!file_exists($path)) {
     exit('Not Found');
 }
 
-// 5) Подготовка имени для скачивания
+
 $filename = basename($path);
 
-// 6) Отдаём заголовки для «скачать как…»
+
 header('Content-Description: File Transfer');
 header('Content-Type: application/octet-stream');
 header('Content-Disposition: attachment; filename="' . $filename . '"');
@@ -62,6 +62,6 @@ header('Cache-Control: must-revalidate');
 header('Pragma: public');
 header('Content-Length: ' . filesize($path));
 
-// 7) Выдаём файл
+
 readfile($path);
 exit;

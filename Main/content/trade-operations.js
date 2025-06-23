@@ -1,4 +1,4 @@
-// Эндпоинты
+
 const GET_TRADES_URL   = 'content/trade_operations/get_trade_operations.php';
 const SAVE_TRADE_URL   = 'content/trade_operations/save_trade_operation.php';
 const DELETE_TRADE_URL = 'content/trade_operations/delete_trade_operation.php';
@@ -28,13 +28,13 @@ function renderTrade(tr) {
 async function loadTrades() {
   const list = el('trade-operations-list');
   if (!list) return;
-  list.innerHTML = '';      // очищаем список перед добавлением
+  list.innerHTML = '';      
 
   try {
     const res  = await fetch(GET_TRADES_URL, { credentials:'include' });
     const data = await res.json();
     if (data.status !== 'success') throw new Error(data.message || 'Ошибка загрузки');
-  // вместо текстового уведомления – отрисовываем каждую сделку карточкой:
+  
 +   data.trades.forEach(renderTrade);
   } catch (e) {
     console.error('loadTrades:', e);
@@ -70,7 +70,7 @@ function initTradeForm() {
   const panel = document.querySelector('.trade-filter');
   if (!panel) return;
 
-  // Добавление сделки
+  
   panel.querySelector('.btn-add-trade').addEventListener('click', async () => {
     const tr = {
       purchase_date:   el('trade-date').value,
@@ -82,7 +82,7 @@ function initTradeForm() {
     try {
       const saved = await saveTrade(tr);
       renderTrade(saved);
-      // очистить поля
+      
       ['trade-date','trade-price','trade-quantity','trade-type','trade-ticker']
         .forEach(id => el(id).value = '');
     } catch (e) {
@@ -90,7 +90,7 @@ function initTradeForm() {
     }
   });
 
-  // Удаление сделки (делегирование)
+  
   el('trade-operations-list').addEventListener('click', async e => {
     const btn = e.target.closest('.btn-delete');
     if (!btn) return;
@@ -106,11 +106,11 @@ function initTradeForm() {
   loadTrades();
 }
 
-// Ждём появления панели trade-filter
 
 
 
-// MutationObserver ждёт появления manual-filter и инициализирует
+
+
 const obsTorg = new MutationObserver(() => {
   const panel = document.querySelector('.trade-filter');
   if (!panel || panel.dataset.inited) return;

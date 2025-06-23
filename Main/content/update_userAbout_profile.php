@@ -1,11 +1,11 @@
 <?php
-// update_userAbout_profile.php
+
 
 error_reporting(0);
 header('Content-Type: application/json; charset=utf-8');
 session_start();
 
-// Проверяем авторизацию
+
 if (empty($_SESSION['user_id'])) {
     http_response_code(401);
     echo json_encode(['status'=>'error','message'=>'Не авторизованы']);
@@ -13,7 +13,7 @@ if (empty($_SESSION['user_id'])) {
 }
 $userId = (int)$_SESSION['user_id'];
 
-// Валидация поля «about»
+
 if (!isset($_POST['about'])) {
     http_response_code(400);
     echo json_encode(['status'=>'error','message'=>'Пустой текст «О себе»']);
@@ -21,7 +21,7 @@ if (!isset($_POST['about'])) {
 }
 $about = trim($_POST['about']);
 
-// Параметры БД
+
 define('DB_HOST','localhost');
 define('DB_USER','root');
 define('DB_PASSWORD','password');
@@ -35,7 +35,7 @@ if ($mysqli->connect_error) {
 }
 $mysqli->set_charset('utf8mb4');
 
-// Вставка или обновление
+
 $sql = "
   INSERT INTO `user_profiles` (user_id, about)
   VALUES (?, ?)
@@ -55,7 +55,7 @@ if (!$stmt->execute()) {
     exit;
 }
 
-// Успех
+
 echo json_encode([
   'status' => 'success',
   'message'=> 'Описание «О себе» сохранено',

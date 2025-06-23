@@ -1,4 +1,4 @@
-/* Центр: Личный кабинет */
+
 .info-card.profile-card {
   position: relative;
   background: #fff;
@@ -10,7 +10,7 @@
   overflow: hidden;
 }
 
-/* Полоска изменять бекграунд*/
+
 .info-card.profile-card::before {
   content: "";
   position: absolute;
@@ -19,7 +19,7 @@
   background: #000; 
 }
 
-/* Заголовок */
+
 .info-card.profile-card h1 {
   margin: 0 0 32px;
   font-size: 32px;
@@ -27,12 +27,12 @@
   color: #1c1c1e;
 }
 
-/* Разделители между строками */
+
 .profile-row + .profile-row {
   border-top: 1px solid rgba(0,0,0,0.05);
 }
 
-/* Модель сетки полей */
+
 .profile-row {
   display: grid;
   grid-template-columns: 140px 1fr auto;
@@ -41,14 +41,14 @@
   padding: 20px 0;
 }
 
-/* Метки */
+
 .profile-row .label,
 .profile-row .profile-label {
   font-size: 16px;
   color: #555;
   font-weight: 500;
 }
-/* Центр: Личный кабинет */
+
 .info-card.profile-card {
   position: relative;
   background: #fff;
@@ -60,7 +60,7 @@
   overflow: hidden;
 }
 
-/* Полоска изменять бекграунд*/
+
 .info-card.profile-card::before {
   content: "";
   position: absolute;
@@ -69,7 +69,7 @@
   background: #000; 
 }
 
-/* Заголовок */
+
 .info-card.profile-card h1 {
   margin: 0 0 32px;
   font-size: 32px;
@@ -77,12 +77,12 @@
   color: #1c1c1e;
 }
 
-/* Разделители между строками */
+
 .profile-row + .profile-row {
   border-top: 1px solid rgba(0,0,0,0.05);
 }
 
-/* Модель сетки полей */
+
 .profile-row {
   display: grid;
   grid-template-columns: 140px 1fr auto;
@@ -91,7 +91,7 @@
   padding: 20px 0;
 }
 
-/* Метки */
+
 .profile-row .label,
 .profile-row .profile-label {
   font-size: 16px;
@@ -99,7 +99,7 @@
   font-weight: 500;
 }
 
-/* Поля ввода */
+
 .value,
 .profile-input {
   padding: 12px 16px;
@@ -117,7 +117,7 @@
   outline: none;
 }
 
-/* Кнопки */
+
 .btn-save {
   padding: 10px 24px;
   font-size: 14px;
@@ -136,7 +136,7 @@
   transform: translateY(-2px);
 }
 
-/* Адаптив */
+
 @media (max-width: 600px) {
   .profile-row {
     grid-template-columns: 1fr;
@@ -154,7 +154,7 @@
   }
 }
 
-/* Поля ввода */
+
 .value,
 .profile-input {
   padding: 12px 16px;
@@ -172,7 +172,7 @@
   outline: none;
 }
 
-/* Кнопки */
+
 .btn-save {
   padding: 10px 24px;
   font-size: 14px;
@@ -191,7 +191,7 @@
   transform: translateY(-2px);
 }
 
-/* Адаптив */
+
 @media (max-width: 600px) {
   .profile-row {
     grid-template-columns: 1fr;

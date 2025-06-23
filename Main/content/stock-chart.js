@@ -1,6 +1,6 @@
-// content/stock-chart.js
 
-// 1) Получаем список всех тикеров MOEX
+
+
 async function fetchTickers() {
   const resp = await fetch('https://iss.moex.com/iss/engines/stock/markets/shares/securities.json?iss.meta=off');
   const js   = await resp.json();
@@ -16,10 +16,10 @@ async function fetchTickers() {
 
 const ADD_COMMENT = 'content/add_comment.php';
 
-// будем хранить ник для неанонимных
+
 let currentNickname = '';
 
-// сразу после загрузки страницы подтягиваем профиль
+
 fetch('get_user_profile.php', { credentials: 'include' })
   .then(r => r.ok ? r.json() : Promise.reject(r.status))
   .then(d => {
@@ -27,7 +27,7 @@ fetch('get_user_profile.php', { credentials: 'include' })
   })
   .catch(console.error);
 
-// 2) Загружаем исторические данные по тикеру
+
 async function loadChartData(ticker) {
   const years = [2022, 2023, 2024, new Date().getFullYear()];
   const all   = [];
@@ -53,7 +53,7 @@ async function loadChartData(ticker) {
   return all.sort((a,b) => new Date(a.date) - new Date(b.date));
 }
 
-// 3) Фильтрация по периодам
+
 function filterByPeriod(data, period) {
   const end   = new Date();
   let   start = new Date(end);
@@ -75,7 +75,7 @@ function filterByPeriod(data, period) {
 
 let chart, rawData = [];
 
-// 4) Рендер графика
+
 function renderChart(ticker, data) {
   const labels = data.map(i => i.date);
   const vals   = data.map(i => i.close);
@@ -166,7 +166,7 @@ function renderChart(ticker, data) {
   document.getElementById('sberChart').hidden      = false;
 }
 
-// 5) Обновление
+
 async function updateChart() {
   const ticker   = document.getElementById('ticker-select').value;
   const activeBtn = document.querySelector('.period-btn.active');
@@ -222,7 +222,7 @@ async function loadComments() {
   });
 }
 
-// 6) Инициализатор
+
 async function initStockChart() {
   await fetchTickers();
 
@@ -294,7 +294,7 @@ async function initStockChart() {
   await refreshAll();
 }
 
-// 7) Следим за вставкой секции и инициализируем
+
 const obs = new MutationObserver(() => {
   const sec = document.querySelector('.stock-chart');
   if (sec && !sec.dataset.inited) {

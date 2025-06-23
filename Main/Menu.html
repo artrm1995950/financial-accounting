@@ -46,23 +46,19 @@
 
       
       
-      <!-- остальные пункты аналогично, с data-file -->
     </nav>
   </aside>
 
   <main id="content" class="content-area">
-    <!-- Здесь будет загружаться portfolio.html по умолчанию -->
   </main>
 
   <script>
     
-  // 1) подтягиваем email
   fetch('get_user_email.php', { credentials: 'include' })
     .then(r => r.ok ? r.json() : Promise.reject())
     .then(d => { document.getElementById('user-email').textContent = d.email; })
     .catch(() => { document.getElementById('user-email').textContent = ''; });
 
-  // 2) подгружаем контент
   const contentEl = document.getElementById('content');
   const items = document.querySelectorAll('.menu-item');
 
@@ -102,18 +98,14 @@
   items.forEach(item => {
     item.addEventListener('click', e => {
       e.preventDefault();
-      // переключаем активную
       items.forEach(i => i.classList.remove('active'));
       item.classList.add('active');
-      // грузим файл
       loadFile(item.dataset.file);
     });
   });
 
-  // при старте — загружаем портфель
   loadFile('content/portfolio.html');
   </script>
-  <!-- ваш HTML для профиля... -->
 <script src="../Main/content/ProfileScript.js"></script>
 <script src="../Main/content/uploadFiles.js"></script>
 <script src="../Main/content/stock-chart.js"></script>
@@ -121,10 +113,8 @@
 <script src="../Main/content/manual-operations.js"></script>
 <script src="../Main/content/trade-operations.js"></script>
 <script src="../Main/content/portfolio.js"></script>
-<!-- Подключаем PDF.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.min.js"></script>
 <script>
-  // Указываем путь к воркеру (можете взять его из того же CDN)
   pdfjsLib.GlobalWorkerOptions.workerSrc = 
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.worker.min.js';
 </script>

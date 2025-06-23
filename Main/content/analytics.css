@@ -49,13 +49,13 @@
 
 .chart-wrapper {
   width: 100%;
-  /* фиксированная высота для сохранения пропорций */
+ 
   height: 350px;
   margin-bottom: 24px;
 }
 
 .chart-wrapper canvas {
-  /* растягиваем canvas по ширине, высота будет сохранена через Chart.js */
+ 
   width: 100% !important;
   height: auto !important;
   max-height: 100%;
@@ -65,11 +65,11 @@
   text-align: center;
   margin-bottom: 40px;
 }
-/* ===== Сводки под графиками ===== */
+
 #analytics-summary,
 #trend-summary {
-  max-width: 800px;              /* держим строку до ~100 символов */
-  margin: 32px auto;             /* отступы сверху/снизу, центрируем */
+  max-width: 800px;             
+  margin: 32px auto;            
   background: #fff;
   border: 1px solid #e6e8f0;
   border-radius: 12px;
@@ -80,13 +80,13 @@
   line-height: 1.45;
 }
 
-/* Заголовок-однострочник (итоговая сумма) — жирнее и по центру */
+
 #analytics-summary {
   text-align: center;
   font-weight: 600;
 }
 
-/* Пункты тренд-анализа — ровные отступы между абзацами */
+
 .trend-summary p {
   margin: 6px 0;
 }

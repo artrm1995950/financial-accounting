@@ -1,5 +1,5 @@
 <?php
-// файл: content/get_statements.php
+
 
 session_start();
 header('Content-Type: application/json; charset=utf-8');
@@ -35,7 +35,7 @@ $list = [];
 while ($row = $res->fetch_assoc()) {
   $list[] = [
     'id'          => (int)$row['id'],
-    'fileUrl'     => basename($row['file_path']), // если нужно полный путь, передайте здесь
+    'fileUrl'     => basename($row['file_path']), 
     'bank'        => $row['bank'],
     'upload_date' => $row['upload_date']
   ];

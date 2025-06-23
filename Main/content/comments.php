@@ -1,16 +1,16 @@
 <?php
-// comments.php
+
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 
-// проверка авторизации (если нужна)
-// if (empty($_SESSION['user_id'])) {
-//   http_response_code(401);
-//   echo json_encode([]);
-//   exit;
-//}
 
-// настройки БД (как в других скриптах)
+
+
+
+
+
+
+
 define('DB_HOST',     'localhost');
 define('DB_USER',     'root');
 define('DB_PASSWORD', 'password');
@@ -24,14 +24,14 @@ if ($mysqli->connect_error) {
 }
 $mysqli->set_charset('utf8mb4');
 
-// читаем параметр category (тикер) из GET
+
 $category = trim($_GET['ticker'] ?? '');
 if ($category === '') {
     echo json_encode([]);
     exit;
 }
 
-// готовим запрос
+
 $sql = "SELECT username, message_text, created_at 
         FROM comments 
         WHERE category = ? 

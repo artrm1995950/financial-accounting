@@ -1,18 +1,18 @@
-// файл: uploadFiles.js
-// ***** Авто-подгрузка при каждом появлении вкладки «Выписки» *****
-// файл: uploadFiles.js
 
-// ***** НОВЫЙ МЕХАНИЗМ ДЛЯ ПОДГРУЗКИ ПРИ КАЖДОМ ВХОЖДЕНИИ *****
-// Следим за тем, когда в DOM появится контейнер #statements-list
+
+
+
+
+
 const uploadObserver  = new MutationObserver((mutations) => {
   const container = document.getElementById('statements-list');
   if (container && !container.dataset.loaded) {
-    container.dataset.loaded = '1'; // пометим, что уже загрузили
+    container.dataset.loaded = '1'; 
     loadStatements();
   }
 });
 uploadObserver.observe(document.body, { childList: true, subtree: true });
-// *******************************************************
+
 
 const BANK_LABELS = {
   sber:   'Сбер',
@@ -24,10 +24,10 @@ const BANK_LABELS = {
 
 
 
-// URL для работы
+
 const LIST_URL   = 'content/get_statements.php';
 const UPLOAD_URL = 'content/upload_file.php';
-// --- Рендер списка выписок ---
+
 function renderItem(o) {
   const item = document.createElement('div');
    const dateOnly = o.upload_date.split(' ')[0]; 
@@ -44,14 +44,14 @@ function renderItem(o) {
   const fn = item.querySelector('.file-name');
   fn.title = o.fileUrl;
 
-  // Скачивание
-  // Скачивание
-// Внутри renderItem, вместо fetch/blob
+  
+  
+
 item.querySelector('.btn-download').addEventListener('click', () => {
-  // создаём невидимую ссылку
+  
   const a = document.createElement('a');
   a.href = 'content/download_statement.php?id=' + o.id;
-  // атрибут download укажет браузеру открыть диалог сохранения
+  
   a.setAttribute('download', '');
   a.style.display = 'none';
   document.body.appendChild(a);
@@ -62,7 +62,7 @@ item.querySelector('.btn-download').addEventListener('click', () => {
 
 
 
-  // Удаление
+  
   item.querySelector('.btn-delete').addEventListener('click', async () => {
     if (!confirm('Точно удалить эту выписку?')) return;
     const id = item.querySelector('.btn-delete').dataset.id;
@@ -114,9 +114,9 @@ async function loadStatements() {
   }
 }
 
-// --- Существующая логика выбора и отправки файла ---
 
-// Показываем имя выбранного файла
+
+
 document.addEventListener('change', (e) => {
   if (e.target.id === 'file-input') {
     const file = e.target.files[0];
@@ -127,7 +127,7 @@ document.addEventListener('change', (e) => {
   }
 });
 
-// Клик по «Добавить»
+
 document.addEventListener('click', async (e) => {
   if (!e.target.classList.contains('btn-add')) return;
 
@@ -159,7 +159,7 @@ document.addEventListener('click', async (e) => {
   });
 
   if (!res.ok) {
-    // Пишем в консоль HTTP-статус
+    
     console.error(`Ошибка HTTP: ${res.status}`);
     const errorJson = await res.json();
     alert('Ошибка: ' + (errorJson.message || 'Неизвестная ошибка'));
@@ -174,7 +174,7 @@ document.addEventListener('click', async (e) => {
     fileInput.value          = '';
     nameDisplay.value        = '';
     alert('Файл успешно добавлен');
-    await loadStatements(); // обновить список
+    await loadStatements(); 
   } else {
     alert('Ошибка: ' + (json.message || 'неизвестная'));
   }
@@ -188,9 +188,9 @@ document.addEventListener('click', async (e) => {
 
 });
 
-// --- Инициализация при загрузке страницы ---
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Существующие функции не трогаем
+  
   loadStatements();
 });
 const parentContainer = document.querySelector('#main-content') || document.body;

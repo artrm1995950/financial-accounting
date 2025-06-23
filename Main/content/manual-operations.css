@@ -1,20 +1,20 @@
-/* manual-operations.css */
 
-/* Секция и отступы */
+
+
 .statements-section {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
 
-/* Заголовок */
+
 .title {
   text-align: center;
   margin-bottom: 24px;
   font-size: 2rem;
 }
 
-/* Панель ввода операции */
+
 .statements-filter {
   display: flex;
   align-items: center;
@@ -27,7 +27,7 @@
   margin-bottom: 24px;
 }
 
-/* Блок «лейбл + поле» */
+
 .field-row {
   display: flex;
   flex-direction: column;
@@ -39,7 +39,7 @@
   color: #333;
 }
 
-/* Стили всех инпутов и селектов */
+
 .input-date,
 .input-select,
 .input-number {
@@ -59,7 +59,7 @@
   border-color: #7c4dff;
 }
 
-/* Общий класс кнопок */
+
 .btn {
   border: none;
   border-radius: 8px;
@@ -68,7 +68,7 @@
   padding: 10px 20px;
 }
 
-/* Кнопка «Добавить» */
+
 .btn-primary,
 .btn-add {
   background: #7c4dff;
@@ -81,14 +81,14 @@
   background: #6931ca;
 }
 
-/* Список операций */
+
 .statements-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-/* Карточка операции */
+
 .statement-item {
   display: flex;
   justify-content: space-between;
@@ -104,7 +104,7 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-/* Инфо блока: дата и категория */
+
 .statement-info {
   display: flex;
   gap: 24px;
@@ -120,7 +120,7 @@
   color: #555;
 }
 
-/* Отображение суммы */
+
 .statement-amount {
   font-weight: 600;
   font-size: 1rem;
@@ -133,7 +133,7 @@
 .statement-amount.income {
   color: #2e7d32;
 }
-/* Кнопка Удалить в стиле Добавить */
+
 .btn-delete {
   padding: 10px 20px;
   border: none;
